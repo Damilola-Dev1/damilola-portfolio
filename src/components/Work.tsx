@@ -1,6 +1,7 @@
 // Project cards that stack: as you scroll, each card slides up and lands on
-// top of the one before it (on tablets and desktops). On phones they simply
-// sit one below the other.
+// top of the one before it. This works on phones, tablets and desktops.
+// Every card on a phone has the same height on purpose, so a shorter card
+// never leaves the edge of a taller one showing underneath it.
 //
 // HOW TO EDIT
 // - Change, add or delete entries in PROJECTS below.
@@ -11,6 +12,8 @@
 // - `image` is optional. The screenshot sits in the public folder, so the
 //   path is just the file name, for example "/pwesh.jpg". With no image, a
 //   simple empty browser window is drawn instead.
+
+import type { CSSProperties } from "react";
 
 type Project = {
   name: string;
@@ -37,18 +40,18 @@ const PROJECTS: Project[] = [
     image: "/reformers.jpg",
   },
   {
+    name: "Pwesh Beauty Hub",
+    text: "A landing page for a beauty training business.",
+    url: "https://pwesh-beauty-hub.netlify.app/",
+    image: "/pwesh.jpg",
+  },
+  {
     name: "Expense Tracker",
     text: "A ledger-style expense tracker where you add, edit and delete entries, with input checks.",
     tools: ["JavaScript", "HTML", "CSS"],
     url: "https://github.com/Damilola-Dev1/expense-tracker",
     linkLabel: "View code",
     image: "/expense-tracker.jpg",
-  },
-  {
-    name: "Pwesh Beauty Hub",
-    text: "A landing page for a beauty training business.",
-    url: "https://pwesh-beauty-hub.netlify.app/",
-    image: "/pwesh.jpg",
   },
 ];
 
@@ -93,22 +96,22 @@ export default function Work() {
           {PROJECTS.map((p, i) => (
             <li
               key={p.name}
-              className="mb-8 md:sticky"
+              className="sticky top-[calc(5.5rem_+_var(--i)_*_0.5rem)] mb-8 md:top-[calc(6rem_+_var(--i)_*_0.75rem)]"
               // each card sticks a little lower than the last, so the edges
               // of the cards underneath stay visible
-              style={{ top: `calc(6rem + ${i} * 0.75rem)` }}
+              style={{ "--i": i } as CSSProperties}
             >
-              <article className="grid overflow-hidden rounded-3xl border border-ink/20 shadow-[0_-14px_24px_-18px_rgba(21,19,15,0.45)] md:h-[26rem] md:grid-cols-[2fr_3fr] md:grid-rows-[minmax(0,1fr)]">
+              <article className="grid h-[32rem] grid-rows-[minmax(0,1fr)_auto] overflow-hidden rounded-3xl border border-ink/20 shadow-[0_-14px_24px_-18px_rgba(21,19,15,0.45)] md:h-[26rem] md:grid-cols-[2fr_3fr] md:grid-rows-[minmax(0,1fr)]">
                 {/* text side */}
-                <div className="flex min-h-0 flex-col bg-forest p-8 text-paper md:p-10">
-                  <h3 className="font-display text-3xl font-extrabold leading-[1.02] tracking-tight md:text-4xl">
+                <div className="flex min-h-0 flex-col bg-forest p-5 text-paper md:p-10">
+                  <h3 className="font-display text-2xl font-extrabold leading-[1.02] tracking-tight md:text-4xl">
                     {p.name}
                   </h3>
-                  <p className="mt-4 text-base text-sand md:text-lg">
+                  <p className="mt-3 text-sm text-sand md:mt-4 md:text-lg">
                     {p.text}
                   </p>
 
-                  <div className="mt-auto pt-8">
+                  <div className="mt-auto pt-5 md:pt-8">
                     {p.tools && p.tools.length > 0 && (
                       <p className="text-sm text-sand">
                         Built with {list.format(p.tools)}.
@@ -119,7 +122,7 @@ export default function Work() {
                         href={p.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2.5 text-sm font-semibold text-forest transition-transform hover:-translate-y-0.5"
+                        className="mt-3 inline-flex items-center gap-2 rounded-full md:mt-4 bg-paper px-5 py-2.5 text-sm font-semibold text-forest transition-transform hover:-translate-y-0.5"
                       >
                         {p.linkLabel ?? "Visit site"}
                         <span aria-hidden="true" className="text-vermilion">
@@ -134,7 +137,7 @@ export default function Work() {
                 {/* screenshot side. On phones the screenshot sits in a wide
                     box so none of it is cut off; from md up it fills the
                     side of the card. */}
-                <div className="relative min-h-0 bg-sand p-5 md:p-0">
+                <div className="relative min-h-0 bg-sand p-3 md:p-0">
                   <div className="relative aspect-[2.2/1] overflow-hidden rounded-lg shadow-[0_12px_24px_-12px_rgba(21,19,15,0.35)] md:absolute md:inset-10 md:aspect-auto">
                     {p.image ? (
                       <img
