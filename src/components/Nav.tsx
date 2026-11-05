@@ -14,11 +14,20 @@ export default function Nav() {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // Show the pill only once the hero (id="top") has scrolled out of view.
+  // After that it stays fixed at the top through every section.
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 120);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const hero = document.getElementById("top");
+    if (!hero) {
+      setVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(!entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px" },
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
   }, []);
 
   // Close the menu if the pill hides, or when Escape is pressed
