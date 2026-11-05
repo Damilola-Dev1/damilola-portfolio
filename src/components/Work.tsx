@@ -26,8 +26,8 @@ const PROJECTS: Project[] = [
     name: "Cedars School Admin",
     text: "A school management app with separate dashboards for admins, teachers, bursars, parents and students.",
     tools: ["React", "TypeScript", "Firebase", "Tailwind CSS"],
-    url: "",
-    image: "",
+    // no link yet: add url: "https://..." when the app is live
+    image: "/cedars.jpg",
   },
   {
     name: "The Reformers Nation Community App",
