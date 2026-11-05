@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const links = [
-  { href: "#top", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#work", label: "Work" },
+  { to: "/#top", label: "Home" },
+  { to: "/#about", label: "About" },
+  { to: "/#skills", label: "Skills" },
+  { to: "/#work", label: "Work" },
 ];
 
-// Hidden while the hero is on screen. A floating pill appears once you scroll
-// past it and stays fixed through every section.
+// On the home page the pill appears once the hero has scrolled out of view and
+// then stays fixed. On other pages (no hero) it is always showing.
 // Phones: "Dami" plus a menu button that opens a dropdown panel.
 // md and up: the links sit inside the pill.
 export default function Nav() {
+  const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Show the pill only once the hero (id="top") has scrolled out of view.
-  // After that it stays fixed at the top through every section.
   useEffect(() => {
+    setOpen(false);
     const hero = document.getElementById("top");
     if (!hero) {
       setVisible(true);
@@ -29,7 +30,7 @@ export default function Nav() {
     );
     observer.observe(hero);
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   // Close the menu if the pill hides
   useEffect(() => {
@@ -61,35 +62,35 @@ export default function Nav() {
           aria-label="Primary"
           className="pointer-events-auto flex items-center justify-between gap-3 rounded-full border border-sand/20 bg-ink py-2 pl-6 pr-2.5"
         >
-          <a
-            href="#top"
+          <Link
+            to="/#top"
             onClick={close}
             aria-label="Damilola Samuel, back to top"
             className="font-display text-2xl font-extrabold tracking-tight text-paper"
           >
             Dami
             <span className="text-vermilion">.</span>
-          </a>
+          </Link>
 
           {/* md and up: links inside the pill */}
           <ul className="hidden items-center gap-6 text-sm md:flex">
             {links.slice(1).map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
+              <li key={link.to}>
+                <Link
+                  to={link.to}
                   className="text-sand transition-colors hover:text-paper"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li>
-              <a
-                href="#contact"
+              <Link
+                to="/#contact"
                 className="block rounded-full bg-paper px-5 py-2 font-semibold text-ink transition-colors hover:bg-sand"
               >
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
 
@@ -137,24 +138,24 @@ export default function Nav() {
               <div className="rounded-[2rem] border border-sand/20 bg-ink px-6 pb-6 pt-5">
                 <ul className="flex flex-col">
                   {links.map((link) => (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
+                    <li key={link.to}>
+                      <Link
+                        to={link.to}
                         onClick={close}
                         className="block py-3 text-xl text-paper/90 transition-colors hover:text-vermilion"
                       >
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="#contact"
+                <Link
+                  to="/#contact"
                   onClick={close}
                   className="mt-4 block rounded-full bg-paper py-3.5 text-center text-lg font-semibold text-ink transition-colors hover:bg-sand"
                 >
                   Contact
-                </a>
+                </Link>
               </div>
             </div>
           </div>

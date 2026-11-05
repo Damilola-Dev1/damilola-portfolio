@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -77,10 +78,10 @@ export default function About() {
             <p className="reveal font-mono text-xs uppercase tracking-widest text-forest">
               Meet Damilola
             </p>
-            <h2 className="reveal mt-4 font-display text-4xl font-extrabold leading-[1.02] tracking-tight md:text-6xl">
-              Built with a{" "}
-              <span className="relative inline-block">
-                business
+            <h2 className="reveal mt-4 font-display text-3xl font-extrabold leading-[1.08] tracking-tight md:text-5xl">
+              A developer with a{" "}
+              <span className="relative inline-block whitespace-nowrap">
+                business mind
                 {/* double hand-drawn underline */}
                 <svg
                   aria-hidden="true"
@@ -106,24 +107,40 @@ export default function About() {
                   />
                 </svg>
               </span>{" "}
-              mind.
+              and a curiosity for technology.
             </h2>
 
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink/85">
               <p className="reveal">
-                I'm Damilola, a frontend developer based in Lagos. I build React
-                and TypeScript interfaces that are clear, quick and easy to use.
+                I’m Damilola Samuel, a frontend developer based in Lagos,
+                Nigeria. I build responsive websites and practical web
+                applications using React, JavaScript and TypeScript.
               </p>
               <p className="reveal">
-                My background is in Business Administration, so I think about
-                what a website has to do for the person who owns it: bring in
-                customers, build trust and be simple to run.
+                My background in Business Administration, combined with
+                experience in customer support and operations, influences how I
+                approach development. I think beyond the interface, considering
+                the people using a product, the business behind it and the
+                problems it needs to solve.
               </p>
               <p className="reveal">
-                Outside client work, I explain technology in plain language, so
-                the people who rely on it understand what it can do for them.
+                I also enjoy making technology easier to understand by
+                explaining technical ideas in plain language.
               </p>
             </div>
+
+            <Link
+              to="/more-about"
+              className="reveal group mt-8 inline-flex items-center gap-2 font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-4 transition-colors hover:text-vermilion"
+            >
+              More about me
+              <span
+                aria-hidden="true"
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Link>
           </div>
         </div>
 
