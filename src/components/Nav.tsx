@@ -27,16 +27,18 @@ export default function Nav() {
     >
       <nav
         aria-label="Primary"
-        className="pointer-events-auto flex w-full max-w-2xl items-center justify-between gap-4 rounded-full border border-sand/20 bg-ink py-2 pl-6 pr-2"
+        className="pointer-events-auto flex w-full max-w-2xl items-center justify-between gap-3 rounded-full border border-sand/20 bg-ink py-2 pl-5 pr-2 sm:gap-4 sm:pl-6"
       >
         <a
           href="#top"
-          className="hidden font-display text-lg font-bold tracking-tight text-paper sm:block"
+          aria-label="Damilola Samuel, back to top"
+          className="font-display text-xl font-extrabold tracking-tight text-paper"
         >
-          Damilola
+          Dami
+          <span className="text-vermilion">.</span>
         </a>
 
-        <ul className="ml-auto flex items-center gap-4 text-sm md:gap-6">
+        <ul className="flex items-center gap-3 text-sm sm:gap-4 md:gap-6">
           {links.map((link) => (
             <li key={link.href}>
               <a
@@ -50,7 +52,7 @@ export default function Nav() {
           <li>
             <a
               href="#contact"
-              className="block rounded-full bg-paper px-5 py-2 font-semibold text-ink transition-colors hover:bg-sand"
+              className="block rounded-full bg-paper px-4 py-2 font-semibold text-ink transition-colors hover:bg-sand sm:px-5"
             >
               Contact
             </a>
