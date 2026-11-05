@@ -109,7 +109,7 @@ export default function Skills() {
   return (
     <section
       id="skills"
-      className="overflow-hidden bg-ink px-6 py-24 text-paper md:px-10 md:py-32"
+      className="overflow-hidden bg-ink px-6 py-16 text-paper md:px-10 md:py-24"
     >
       {/* the crossing bands */}
       <div aria-hidden="true" className="relative -mx-6 h-64 md:-mx-10 md:h-80">
@@ -137,14 +137,10 @@ export default function Skills() {
         />
       </div>
 
-      <div className="mx-auto mt-16 max-w-6xl md:mt-20">
-        <h2 className="max-w-4xl font-display text-3xl font-bold leading-[1.1] tracking-tight md:text-5xl">
-          React, TypeScript and JavaScript, supported by Firebase, Tailwind CSS,
-          REST APIs and practical business and operations knowledge.
-        </h2>
-
-        {/* full skills list for screen readers only. Nothing changes on screen */}
-        <ul className="sr-only">
+      {/* full skills list for screen readers only. Nothing changes on screen */}
+      <div className="sr-only">
+        <h2>Skills</h2>
+        <ul>
           {GROUPS.map((group) => (
             <li key={group.title}>
               {group.title}: {group.skills.join(", ")}

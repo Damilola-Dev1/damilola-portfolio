@@ -52,22 +52,24 @@
 
 /* Skills bands: words slide along a band in an endless loop.
    Each track holds the same list twice, so moving it by half its width
-   lands exactly where it started. */
+   lands exactly where it started.
+   translate3d + will-change keep Safari on iPhone from freezing the
+   animation inside a tilted, overflow-hidden band. */
 @keyframes marquee-left {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 @keyframes marquee-right {
   from {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
   to {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -75,6 +77,8 @@
   animation-duration: var(--marquee-duration, 50s);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .marquee-left {
@@ -85,17 +89,11 @@
   animation-name: marquee-right;
 }
 
-/* Hovering a band holds it still */
-.marquee-band:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .marquee-track {
-    animation: none;
+/* Hovering a band holds it still. Mouse only, so a tap on a phone
+   can't leave it stuck. */
+@media (hover: hover) {
+  .marquee-band:hover .marquee-track {
+    animation-play-state: paused;
   }
 }
 
@@ -143,13 +141,7 @@
   animation: pill-bob 3.2s ease-in-out infinite alternate;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .chat-in,
-  .pill-in,
-  .pill-bob {
-    animation: none;
-  }
-}
+/* Link arrows: a small nudge so links look clickable */
 @keyframes nudge {
   0%,
   100% {
@@ -160,12 +152,35 @@
   }
 }
 
+@keyframes nudge-left {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-6px);
+  }
+}
+
 .nudge {
   animation: nudge 1.6s ease-in-out infinite;
 }
 
+.nudge-left {
+  animation: nudge-left 1.6s ease-in-out infinite;
+}
+
+/* One place that switches all motion off for people who ask for it */
 @media (prefers-reduced-motion: reduce) {
-  .nudge {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .chat-in,
+  .pill-in,
+  .pill-bob,
+  .nudge,
+  .nudge-left {
     animation: none;
   }
 }
