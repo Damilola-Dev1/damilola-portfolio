@@ -85,9 +85,12 @@ export default function MoreAbout() {
         <div className="mx-auto max-w-6xl">
           <Link
             to="/#about"
-            className="reveal inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-forest transition-colors hover:text-vermilion"
+            className="reveal inline-flex items-center gap-2 font-mono text-sm uppercase tracking-widest text-forest transition-colors hover:text-vermilion md:text-base"
           >
-            <span aria-hidden="true">←</span> Back to home
+            <span aria-hidden="true" className="nudge-left inline-block">
+              ←
+            </span>
+            Back to home
           </Link>
 
           <div className="mt-10 grid items-center gap-12 md:grid-cols-[4fr_6fr] md:gap-20">
@@ -282,14 +285,14 @@ export default function MoreAbout() {
                     kind of work, for example to="/#work" or an external link. */}
                 <Link
                   to="/#work"
-                  className="group mt-8 inline-flex items-center gap-2 font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-4 transition-colors hover:text-vermilion"
+                  className="group mt-8 inline-flex items-center gap-3 text-xl font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-8 transition-colors hover:text-vermilion md:text-2xl"
                 >
                   See my work
                   <span
                     aria-hidden="true"
-                    className="transition-transform duration-300 group-hover:translate-x-1"
+                    className="inline-block transition-transform duration-300 group-hover:translate-x-2"
                   >
-                    →
+                    <span className="nudge inline-block">→</span>
                   </span>
                 </Link>
               </div>
@@ -366,13 +369,13 @@ export default function MoreAbout() {
           <div className="reveal mt-10 flex flex-wrap gap-3">
             <Link
               to="/#contact"
-              className="rounded-full bg-vermilion px-8 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5"
+              className="rounded-full bg-vermilion px-8 py-4 text-base font-semibold text-ink transition-transform hover:-translate-y-0.5"
             >
               Work with me
             </Link>
             <Link
               to="/#work"
-              className="rounded-full border border-paper/40 px-8 py-3 text-sm font-semibold text-paper transition-colors hover:bg-paper/10"
+              className="rounded-full border border-paper/40 px-8 py-4 text-base font-semibold text-paper transition-colors hover:bg-paper/10"
             >
               See my work
             </Link>

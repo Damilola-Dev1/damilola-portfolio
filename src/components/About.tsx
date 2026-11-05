@@ -75,30 +75,21 @@ export default function About() {
 
           {/* story */}
           <div>
-            <p className="reveal font-mono text-xs uppercase tracking-widest text-forest">
+            <p className="reveal font-mono text-sm uppercase tracking-widest text-forest md:text-base">
               Meet Damilola
             </p>
-            <h2 className="reveal mt-4 font-display text-3xl font-extrabold leading-[1.08] tracking-tight md:text-5xl">
+            <h2 className="reveal mt-4 font-display text-3xl font-extrabold leading-[1.2] tracking-tight md:text-5xl md:leading-[1.08]">
               A developer with a{" "}
               <span className="relative inline-block whitespace-nowrap">
                 business mind
-                {/* double hand-drawn underline */}
                 <svg
                   aria-hidden="true"
-                  viewBox="0 0 200 20"
+                  viewBox="0 0 200 12"
                   preserveAspectRatio="none"
-                  className="absolute -bottom-3 left-0 h-4 w-full text-vermilion"
+                  className="absolute -bottom-1 left-0 h-2.5 w-full text-vermilion md:-bottom-2 md:h-3"
                 >
                   <path
-                    d="M2 6 C 40 1, 80 11, 120 5 S 180 3, 198 6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                  <path
-                    d="M22 16 C 55 11, 90 19, 125 14 S 165 12, 182 15"
+                    d="M2 8 C 40 2, 80 12, 120 6 S 180 4, 198 8"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="3"
@@ -131,14 +122,14 @@ export default function About() {
 
             <Link
               to="/more-about"
-              className="reveal group mt-8 inline-flex items-center gap-2 font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-4 transition-colors hover:text-vermilion"
+              className="reveal group mt-10 inline-flex items-center gap-3 text-xl font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-8 transition-colors hover:text-vermilion md:text-2xl"
             >
               More about me
               <span
                 aria-hidden="true"
-                className="transition-transform duration-300 group-hover:translate-x-1"
+                className="inline-block transition-transform duration-300 group-hover:translate-x-2"
               >
-                →
+                <span className="nudge inline-block">→</span>
               </span>
             </Link>
           </div>
