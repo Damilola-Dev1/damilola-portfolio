@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // 1. Put a second photo in the `public` folder (for example public/about.jpg)
 // 2. Set this to "/about.jpg"
-const ABOUT_SRC = "";
+const ABOUT_SRC = "/about.jpg";
 
 const ROLES = [
   {

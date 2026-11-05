@@ -26,8 +26,103 @@
   }
 }
 
+/* Skills bands: words slide along a band in an endless loop.
+   Each track holds the same list twice, so moving it by half its width
+   lands exactly where it started. */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee-track {
+  animation-duration: var(--marquee-duration, 50s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.marquee-left {
+  animation-name: marquee-left;
+}
+
+.marquee-right {
+  animation-name: marquee-right;
+}
+
+/* Hovering a band holds it still */
+.marquee-band:hover .marquee-track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Reviews: chat bubbles arrive, quote pills pop out beside the phone */
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pill-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pill-bob {
+  from {
+    transform: translateY(-5px);
+  }
+  to {
+    transform: translateY(5px);
+  }
+}
+
+.chat-in {
+  animation: chat-in 0.45s ease-out both;
+}
+
+.pill-in {
+  animation: pill-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.pill-bob {
+  animation: pill-bob 3.2s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-in,
+  .pill-in,
+  .pill-bob {
+    animation: none;
   }
 }

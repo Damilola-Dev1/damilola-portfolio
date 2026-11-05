@@ -2,7 +2,7 @@ import type { CSSProperties, Ref } from "react";
 
 // 1. Put your photo in the `public` folder (for example public/portrait.jpg)
 // 2. Set this to "/portrait.png"
-const PORTRAIT_SRC = "portrait.png";
+const PORTRAIT_SRC = "/portrait.png";
 
 const faceStyle: CSSProperties = {
   backfaceVisibility: "hidden",

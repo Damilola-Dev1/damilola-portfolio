@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 const links = [
   { href: "#about", label: "About" },
-  { href: "#work", label: "Work" },
   { href: "#skills", label: "Skills" },
+  { href: "#work", label: "Work" },
 ];
 
 // Hidden at the top of the page. A floating pill slides in once you scroll.
