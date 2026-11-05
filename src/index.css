@@ -20,11 +20,11 @@
   --strap-h: clamp(80px, 21svh, 210px);
 }
 
-/* Phones held upright: a slimmer card on a longer strap */
+/* Phones held upright: a slim card on a long thin strap */
 @media (max-width: 767px) {
   :root {
-    --card-w: clamp(150px, min(32svh, 52vw), 260px);
-    --card-ratio: 5 / 8;
+    --card-w: clamp(150px, min(36svh, 56vw), 260px);
+    --card-ratio: 0.61;
     --strap-h: clamp(80px, 14svh, 140px);
   }
 }

@@ -1,7 +1,8 @@
 // The strap and metal clip the card hangs from. The strap runs off the top of
 // the screen so it always looks fixed to the page.
 // Its height comes from --strap-h in src/index.css.
-// On phones the strap is thin (14px) and the clip is smaller.
+// On phones the strap is thin (14px), the clip is smaller, and a little
+// slider sits on the strap between the two words beside it.
 export default function Lanyard() {
   return (
     <div className="relative z-10 flex flex-col items-center">
@@ -20,6 +21,13 @@ export default function Lanyard() {
         <span className="absolute inset-y-0 right-[2px] border-r border-dashed border-sand/50 md:right-[3px]" />
         {/* a single vermilion thread down the middle */}
         <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-vermilion md:w-[2px]" />
+
+        {/* PHONES ONLY: slider on the strap.
+            The strap starts 32px above the screen, so top-[94px] is about
+            62px down the screen. Change it to move the slider. */}
+        <span className="absolute left-1/2 top-[94px] h-[15px] w-[30px] -translate-x-1/2 rounded-[4px] border border-ink/60 bg-sand md:hidden">
+          <span className="absolute inset-x-[6px] top-1/2 h-[4px] -translate-y-1/2 rounded-full bg-ink/70" />
+        </span>
       </div>
 
       {/* metal clip */}
