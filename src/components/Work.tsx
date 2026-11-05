@@ -101,7 +101,7 @@ export default function Work() {
               // of the cards underneath stay visible
               style={{ "--i": i } as CSSProperties}
             >
-              <article className="grid h-[32rem] grid-rows-[minmax(0,1fr)_auto] overflow-hidden rounded-3xl border border-ink/20 shadow-[0_-14px_24px_-18px_rgba(21,19,15,0.45)] md:h-[26rem] md:grid-cols-[2fr_3fr] md:grid-rows-[minmax(0,1fr)]">
+              <article className="grid h-[28rem] grid-rows-[minmax(0,1fr)_auto] overflow-hidden rounded-3xl border border-ink/20 shadow-[0_-14px_24px_-18px_rgba(21,19,15,0.45)] md:h-[26rem] md:grid-cols-[2fr_3fr] md:grid-rows-[minmax(0,1fr)]">
                 {/* text side */}
                 <div className="flex min-h-0 flex-col bg-forest p-5 text-paper md:p-10">
                   <h3 className="font-display text-2xl font-extrabold leading-[1.02] tracking-tight md:text-4xl">
