@@ -7,34 +7,52 @@ const links = [
   { href: "#work", label: "Work" },
 ];
 
-// Hidden at the top of the page. A floating pill slides in once you scroll.
+// Hidden while the hero is on screen. After the hero, the floating pill hides
+// when you scroll down (so it never covers text) and returns when you scroll up.
 // Phones: "Dami" plus a menu button that opens a dropdown panel.
 // md and up: the links sit inside the pill.
 export default function Nav() {
-  const [visible, setVisible] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const [scrollingUp, setScrollingUp] = useState(true);
   const [open, setOpen] = useState(false);
 
-  // Show the pill only once the hero (id="top") has scrolled out of view.
-  // After that it stays fixed at the top through every section.
+  // The pill is allowed once the hero has scrolled out of view.
   useEffect(() => {
     const hero = document.getElementById("top");
     if (!hero) {
-      setVisible(true);
+      setPastHero(true);
       return;
     }
     const observer = new IntersectionObserver(
-      ([entry]) => setVisible(!entry.isIntersecting),
+      ([entry]) => setPastHero(!entry.isIntersecting),
       { rootMargin: "-80px 0px 0px 0px" },
     );
     observer.observe(hero);
     return () => observer.disconnect();
   }, []);
 
-  // Close the menu if the pill hides, or when Escape is pressed
+  // Track the scroll direction: down hides the pill, up shows it.
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) < 8) return; // ignore tiny movements
+      setScrollingUp(y < lastY);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Visible after the hero, when scrolling up, or while the menu is open.
+  const visible = pastHero && (scrollingUp || open);
+
+  // Close the menu if the pill hides
   useEffect(() => {
     if (!visible) setOpen(false);
   }, [visible]);
 
+  // Close the menu with Escape
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
