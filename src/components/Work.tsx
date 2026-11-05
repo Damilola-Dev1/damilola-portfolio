@@ -4,17 +4,20 @@
 //
 // HOW TO EDIT
 // - Change, add or delete entries in PROJECTS below.
-// - `url` is optional. With no url, the "Visit site" button is hidden.
+// - `url` is optional. With no url, the button is hidden.
+// - `linkLabel` is optional. The button says "Visit site" unless you set it,
+//   for example "View code" for a GitHub link.
 // - `tools` is optional. With no tools, the "Built with" line is hidden.
-// - `image` is optional. Put the screenshot in public/projects/ and write
-//   the path, for example "/projects/cedars.png". With no image, a simple
-//   empty browser window is drawn instead.
+// - `image` is optional. The screenshot sits in the public folder, so the
+//   path is just the file name, for example "/pwesh.png". With no image, a
+//   simple empty browser window is drawn instead.
 
 type Project = {
   name: string;
   text: string;
   tools?: string[];
   url?: string;
+  linkLabel?: string;
   image?: string;
 };
 
@@ -30,21 +33,23 @@ const PROJECTS: Project[] = [
     name: "The Reformers Nation Community App",
     text: "A community app for registering and managing members, with announcements and admin dashboards.",
     tools: ["React", "TypeScript", "Firebase"],
-    url: "",
-    image: "",
+    url: "https://reformers-community-app.web.app/login",
+    image: "/reformers.png",
   },
   {
     name: "Expense Tracker",
     text: "A ledger-style expense tracker where you add, edit and delete entries, with input checks.",
     tools: ["JavaScript", "HTML", "CSS"],
-    url: "",
-    image: "",
+    url: "https://github.com/Damilola-Dev1/expense-tracker",
+    linkLabel: "View code",
+    // CHECK THIS: use the exact file name from your public folder
+    image: "/expense-tracker.png",
   },
   {
     name: "Pwesh Beauty Hub",
     text: "A landing page for a beauty training business.",
-    url: "",
-    image: "",
+    url: "https://pwesh-beauty-hub.netlify.app/",
+    image: "/pwesh.png",
   },
 ];
 
@@ -117,7 +122,7 @@ export default function Work() {
                         rel="noreferrer"
                         className="mt-4 inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2.5 text-sm font-semibold text-forest transition-transform hover:-translate-y-0.5"
                       >
-                        Visit site
+                        {p.linkLabel ?? "Visit site"}
                         <span aria-hidden="true" className="text-vermilion">
                           ↗
                         </span>
