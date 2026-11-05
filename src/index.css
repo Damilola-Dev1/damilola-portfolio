@@ -12,6 +12,27 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
+/* Hero sizes, shared by the card, the strap and the floating words.
+   Change them here and everything follows. */
+:root {
+  --card-w: clamp(160px, min(37svh, 62vw), 300px);
+  --strap-h: clamp(80px, 21svh, 210px);
+}
+
+/* Phones held upright: a shorter strap leaves room for the words and button */
+@media (max-width: 767px) {
+  :root {
+    --strap-h: clamp(48px, 9svh, 100px);
+  }
+}
+
+/* Short screens (phones turned sideways) */
+@media (max-height: 500px) {
+  :root {
+    --strap-h: 40px;
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

@@ -16,6 +16,15 @@ const reducedMotion = () =>
 const FRONT_HOLD = 4;
 const BACK_HOLD = 5.5;
 
+// Phone layout: word sizes and where the two words beside the strap sit.
+// Make the numbers bigger to move a word down, smaller to move it up.
+const TOP_WORD_SIZE = "clamp(1.5rem, 7.2vw, 2.25rem)";
+const BOTTOM_WORD_SIZE = "clamp(1.75rem, 8.5vw, 2.5rem)";
+const FRONTEND_TOP = "0.75rem";
+const DEVELOPER_TOP = "3.25rem";
+// Space between the strap and each word
+const STRAP_GAP = "26px";
+
 export default function Hero() {
   const swingRef = useRef<HTMLDivElement>(null);
   const flipRef = useRef<HTMLDivElement>(null);
@@ -121,7 +130,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-screen flex-col items-center overflow-hidden pb-10"
+      className="relative flex min-h-svh flex-col items-center overflow-hidden pb-10"
     >
       <h1 className="sr-only">
         Damilola Samuel, frontend developer, web builder and tech creator in
@@ -136,6 +145,34 @@ export default function Hero() {
       />
 
       <FloatingWords animate={!reduced} />
+
+      {/* PHONES ONLY: "Frontend" and "Developer" sit either side of the strap,
+          one a little higher and one a little lower. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 md:hidden"
+      >
+        <span
+          className="absolute font-display font-extrabold uppercase leading-none tracking-tight text-paper"
+          style={{
+            top: FRONTEND_TOP,
+            right: `calc(50% + ${STRAP_GAP})`,
+            fontSize: TOP_WORD_SIZE,
+          }}
+        >
+          Frontend
+        </span>
+        <span
+          className="absolute font-display font-extrabold uppercase leading-none tracking-tight text-sand"
+          style={{
+            top: DEVELOPER_TOP,
+            left: `calc(50% + ${STRAP_GAP})`,
+            fontSize: TOP_WORD_SIZE,
+          }}
+        >
+          Developer
+        </span>
+      </div>
 
       {/* the hanging card */}
       <div ref={swingRef} className="relative z-10 flex flex-col items-center">
@@ -152,17 +189,45 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* PHONES ONLY: the other two identities under the card.
+          (The h1 above already tells screen readers everything.) */}
+      <p
+        aria-hidden="true"
+        className="relative z-10 mt-7 px-6 text-center font-display font-extrabold uppercase leading-[1.05] tracking-tight md:hidden"
+        style={{ fontSize: BOTTOM_WORD_SIZE }}
+      >
+        <span className="block">
+          <span className="text-paper">Web </span>
+          <span className="relative inline-block text-sand">
+            Builder
+            <svg
+              viewBox="0 0 200 12"
+              preserveAspectRatio="none"
+              className="absolute -bottom-2 left-0 h-2 w-full text-vermilion"
+            >
+              <path
+                d="M2 8 C 40 2, 80 12, 120 6 S 180 4, 198 8"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </span>
+        </span>
+        <span className="mt-2 block">
+          <span className="text-paper">Tech </span>
+          <span className="text-sand">Creator</span>
+        </span>
+      </p>
+
       <a
         href="#contact"
-        className="relative z-10 mt-[4vh] rounded-full bg-vermilion px-8 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5"
+        className="relative z-10 mt-7 rounded-full bg-vermilion px-8 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5 md:mt-[4vh]"
       >
         Work with me
       </a>
-
-      {/* small screens: the floating words are hidden, so show them here */}
-      <p className="relative z-10 mt-5 px-6 text-center font-display text-sm font-semibold uppercase tracking-wide text-paper md:hidden">
-        Frontend Developer · Web Builder · Tech Creator
-      </p>
     </section>
   );
 }

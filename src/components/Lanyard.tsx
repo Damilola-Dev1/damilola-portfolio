@@ -1,5 +1,6 @@
 // The strap and metal clip the card hangs from. The strap runs off the top of
 // the screen so it always looks fixed to the page.
+// Its height comes from --strap-h in src/index.css.
 export default function Lanyard() {
   return (
     <div className="relative z-10 flex flex-col items-center">
@@ -7,7 +8,7 @@ export default function Lanyard() {
         aria-hidden="true"
         className="relative w-9 bg-forest"
         style={{
-          height: "calc(clamp(120px, 21vh, 210px) + 32px)",
+          height: "calc(var(--strap-h) + 32px)",
           marginTop: "-32px",
           backgroundImage:
             "repeating-linear-gradient(135deg, transparent 0 9px, rgba(242,235,221,0.09) 9px 11px)",

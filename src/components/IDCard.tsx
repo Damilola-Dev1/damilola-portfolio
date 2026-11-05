@@ -54,14 +54,14 @@ type Props = {
 
 export default function IDCard({ innerRef, flipped }: Props) {
   return (
-    // Everything inside is sized in `em`, so the whole card scales with the
-    // screen height. Change the clamp() values to make it bigger or smaller.
+    // Everything inside is sized in `em`, so the whole card scales with its
+    // width. The width comes from --card-w in src/index.css.
     <div
       className="relative -mt-7"
       style={{
-        width: "clamp(210px, 37vh, 300px)",
+        width: "var(--card-w)",
         aspectRatio: "2 / 3",
-        fontSize: "calc(clamp(210px, 37vh, 300px) / 17.5)",
+        fontSize: "calc(var(--card-w) / 17.5)",
       }}
     >
       <div

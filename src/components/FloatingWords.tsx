@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import { gsap } from "gsap";
 
-// Half the card's width. Must match the card size in IDCard.tsx.
-const CARD_HALF = "clamp(210px, 37vh, 300px) / 2";
+// Half the card's width. The card size lives in src/index.css (--card-w).
+const CARD_HALF = "var(--card-w) / 2";
 // Smallest gap between a word and the card. Make it smaller to pull words closer.
 const GAP = "2.5rem";
 
