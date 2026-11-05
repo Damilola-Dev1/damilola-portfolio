@@ -16,13 +16,16 @@
    Change them here and everything follows. */
 :root {
   --card-w: clamp(160px, min(37svh, 62vw), 300px);
+  --card-ratio: 2 / 3;
   --strap-h: clamp(80px, 21svh, 210px);
 }
 
-/* Phones held upright: a shorter strap leaves room for the words and button */
+/* Phones held upright: a slimmer card on a longer strap */
 @media (max-width: 767px) {
   :root {
-    --strap-h: clamp(48px, 9svh, 100px);
+    --card-w: clamp(150px, min(32svh, 52vw), 260px);
+    --card-ratio: 5 / 8;
+    --strap-h: clamp(80px, 14svh, 140px);
   }
 }
 

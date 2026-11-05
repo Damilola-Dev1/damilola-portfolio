@@ -55,12 +55,13 @@ type Props = {
 export default function IDCard({ innerRef, flipped }: Props) {
   return (
     // Everything inside is sized in `em`, so the whole card scales with its
-    // width. The width comes from --card-w in src/index.css.
+    // width. The width and shape come from --card-w and --card-ratio in
+    // src/index.css.
     <div
-      className="relative -mt-7"
+      className="relative -mt-5 md:-mt-7"
       style={{
         width: "var(--card-w)",
-        aspectRatio: "2 / 3",
+        aspectRatio: "var(--card-ratio)",
         fontSize: "calc(var(--card-w) / 17.5)",
       }}
     >
@@ -72,7 +73,7 @@ export default function IDCard({ innerRef, flipped }: Props) {
         {/* FRONT */}
         <div
           aria-hidden={flipped}
-          className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.1em] border border-sand/30 bg-paper text-ink"
+          className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.1em] border border-sand/30 bg-paper text-ink max-md:border-sand/60"
           style={faceStyle}
         >
           <div className="relative bg-forest px-[1.3em] pb-[0.9em] pt-[2.2em] text-paper">
@@ -131,7 +132,7 @@ export default function IDCard({ innerRef, flipped }: Props) {
         {/* BACK */}
         <div
           aria-hidden={!flipped}
-          className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.1em] border border-sand/30 bg-forest px-[1.4em] pb-[1.4em] pt-[2.8em] text-paper"
+          className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.1em] border border-sand/30 bg-forest px-[1.4em] pb-[1.4em] pt-[2.8em] text-paper max-md:border-sand/60"
           style={{ ...faceStyle, transform: "rotateY(180deg)" }}
         >
           <Slot />

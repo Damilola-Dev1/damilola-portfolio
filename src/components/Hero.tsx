@@ -18,12 +18,12 @@ const BACK_HOLD = 5.5;
 
 // Phone layout: word sizes and where the two words beside the strap sit.
 // Make the numbers bigger to move a word down, smaller to move it up.
-const TOP_WORD_SIZE = "clamp(1.5rem, 7.2vw, 2.25rem)";
-const BOTTOM_WORD_SIZE = "clamp(1.75rem, 8.5vw, 2.5rem)";
+const TOP_WORD_SIZE = "clamp(1.25rem, 6vw, 2rem)";
+const BOTTOM_WORD_SIZE = "clamp(1.6rem, 8vw, 2.4rem)";
 const FRONTEND_TOP = "0.75rem";
 const DEVELOPER_TOP = "3.25rem";
 // Space between the strap and each word
-const STRAP_GAP = "26px";
+const STRAP_GAP = "20px";
 
 export default function Hero() {
   const swingRef = useRef<HTMLDivElement>(null);
@@ -130,7 +130,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-svh flex-col items-center overflow-hidden pb-10"
+      className="relative flex min-h-svh flex-col items-center overflow-hidden pb-14 md:pb-10"
     >
       <h1 className="sr-only">
         Damilola Samuel, frontend developer, web builder and tech creator in
@@ -193,7 +193,7 @@ export default function Hero() {
           (The h1 above already tells screen readers everything.) */}
       <p
         aria-hidden="true"
-        className="relative z-10 mt-7 px-6 text-center font-display font-extrabold uppercase leading-[1.05] tracking-tight md:hidden"
+        className="relative z-10 mt-8 px-6 text-center font-display font-extrabold uppercase leading-[1.05] tracking-tight md:hidden"
         style={{ fontSize: BOTTOM_WORD_SIZE }}
       >
         <span className="block">
@@ -224,7 +224,7 @@ export default function Hero() {
 
       <a
         href="#contact"
-        className="relative z-10 mt-7 rounded-full bg-vermilion px-8 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5 md:mt-[4vh]"
+        className="relative z-10 mt-8 rounded-full bg-vermilion px-8 py-3 text-sm font-semibold text-ink transition-transform hover:-translate-y-0.5 md:mt-[4vh]"
       >
         Work with me
       </a>

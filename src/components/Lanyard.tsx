@@ -1,12 +1,13 @@
 // The strap and metal clip the card hangs from. The strap runs off the top of
 // the screen so it always looks fixed to the page.
 // Its height comes from --strap-h in src/index.css.
+// On phones the strap is thin (14px) and the clip is smaller.
 export default function Lanyard() {
   return (
     <div className="relative z-10 flex flex-col items-center">
       <div
         aria-hidden="true"
-        className="relative w-9 bg-forest"
+        className="relative w-[14px] bg-forest md:w-9"
         style={{
           height: "calc(var(--strap-h) + 32px)",
           marginTop: "-32px",
@@ -15,10 +16,10 @@ export default function Lanyard() {
         }}
       >
         {/* stitched edges */}
-        <span className="absolute inset-y-0 left-[3px] border-l border-dashed border-sand/50" />
-        <span className="absolute inset-y-0 right-[3px] border-r border-dashed border-sand/50" />
+        <span className="absolute inset-y-0 left-[2px] border-l border-dashed border-sand/50 md:left-[3px]" />
+        <span className="absolute inset-y-0 right-[2px] border-r border-dashed border-sand/50 md:right-[3px]" />
         {/* a single vermilion thread down the middle */}
-        <span className="absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 bg-vermilion" />
+        <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-vermilion md:w-[2px]" />
       </div>
 
       {/* metal clip */}
@@ -27,7 +28,7 @@ export default function Lanyard() {
         width="36"
         height="64"
         viewBox="0 0 36 64"
-        className="-mt-px text-sand"
+        className="-mt-px h-[46px] w-[26px] text-sand md:h-16 md:w-9"
       >
         <rect
           x="6"
