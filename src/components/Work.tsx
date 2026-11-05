@@ -9,7 +9,7 @@
 //   for example "View code" for a GitHub link.
 // - `tools` is optional. With no tools, the "Built with" line is hidden.
 // - `image` is optional. The screenshot sits in the public folder, so the
-//   path is just the file name, for example "/pwesh.png". With no image, a
+//   path is just the file name, for example "/pwesh.jpg". With no image, a
 //   simple empty browser window is drawn instead.
 
 type Project = {
@@ -34,7 +34,7 @@ const PROJECTS: Project[] = [
     text: "A community app for registering and managing members, with announcements and admin dashboards.",
     tools: ["React", "TypeScript", "Firebase"],
     url: "https://reformers-community-app.web.app/login",
-    image: "/reformers.png",
+    image: "/reformers.jpg",
   },
   {
     name: "Expense Tracker",
@@ -42,14 +42,13 @@ const PROJECTS: Project[] = [
     tools: ["JavaScript", "HTML", "CSS"],
     url: "https://github.com/Damilola-Dev1/expense-tracker",
     linkLabel: "View code",
-    // CHECK THIS: use the exact file name from your public folder
-    image: "/expense-tracker.png",
+    image: "/expense-tracker.jpg",
   },
   {
     name: "Pwesh Beauty Hub",
     text: "A landing page for a beauty training business.",
     url: "https://pwesh-beauty-hub.netlify.app/",
-    image: "/pwesh.png",
+    image: "/pwesh.jpg",
   },
 ];
 
@@ -61,7 +60,7 @@ const list = new Intl.ListFormat("en-GB", {
 // Shown when a project has no screenshot yet
 function EmptyBrowser() {
   return (
-    <div aria-hidden="true" className="h-full bg-paper">
+    <div aria-hidden="true" className="absolute inset-0 bg-paper">
       <div className="flex items-center gap-1.5 border-b border-ink/10 px-3 py-2.5">
         <span className="h-2 w-2 rounded-full bg-forest/30" />
         <span className="h-2 w-2 rounded-full bg-forest/30" />
@@ -132,14 +131,18 @@ export default function Work() {
                   </div>
                 </div>
 
-                {/* screenshot side */}
-                <div className="relative h-64 min-h-0 bg-sand md:h-auto">
-                  <div className="absolute inset-6 overflow-hidden rounded-lg shadow-[0_12px_24px_-12px_rgba(21,19,15,0.35)] md:inset-10">
+                {/* screenshot side. On phones the screenshot sits in a wide
+                    box so none of it is cut off; from md up it fills the
+                    side of the card. */}
+                <div className="relative min-h-0 bg-sand p-5 md:p-0">
+                  <div className="relative aspect-[2.2/1] overflow-hidden rounded-lg shadow-[0_12px_24px_-12px_rgba(21,19,15,0.35)] md:absolute md:inset-10 md:aspect-auto">
                     {p.image ? (
                       <img
                         src={p.image}
                         alt={`Screenshot of ${p.name}`}
-                        className="block h-full w-full object-cover object-top"
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 block h-full w-full object-cover object-top"
                       />
                     ) : (
                       <EmptyBrowser />
