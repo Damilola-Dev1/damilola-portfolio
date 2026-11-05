@@ -7,45 +7,29 @@ const links = [
   { href: "#work", label: "Work" },
 ];
 
-// Hidden while the hero is on screen. After the hero, the floating pill hides
-// when you scroll down (so it never covers text) and returns when you scroll up.
+// Hidden while the hero is on screen. A floating pill appears once you scroll
+// past it and stays fixed through every section.
 // Phones: "Dami" plus a menu button that opens a dropdown panel.
 // md and up: the links sit inside the pill.
 export default function Nav() {
-  const [pastHero, setPastHero] = useState(false);
-  const [scrollingUp, setScrollingUp] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // The pill is allowed once the hero has scrolled out of view.
+  // Show the pill only once the hero (id="top") has scrolled out of view.
+  // After that it stays fixed at the top through every section.
   useEffect(() => {
     const hero = document.getElementById("top");
     if (!hero) {
-      setPastHero(true);
+      setVisible(true);
       return;
     }
     const observer = new IntersectionObserver(
-      ([entry]) => setPastHero(!entry.isIntersecting),
+      ([entry]) => setVisible(!entry.isIntersecting),
       { rootMargin: "-80px 0px 0px 0px" },
     );
     observer.observe(hero);
     return () => observer.disconnect();
   }, []);
-
-  // Track the scroll direction: down hides the pill, up shows it.
-  useEffect(() => {
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (Math.abs(y - lastY) < 8) return; // ignore tiny movements
-      setScrollingUp(y < lastY);
-      lastY = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Visible after the hero, when scrolling up, or while the menu is open.
-  const visible = pastHero && (scrollingUp || open);
 
   // Close the menu if the pill hides
   useEffect(() => {
