@@ -112,14 +112,15 @@ export default function Skills() {
       className="overflow-hidden bg-ink px-6 py-16 text-paper md:px-10 md:py-24"
     >
       {/* the crossing bands */}
-      <div aria-hidden="true" className="relative -mx-6 h-64 md:-mx-10 md:h-80">
-        {/* back band: business skills, vermilion, slides right */}
+      <div aria-hidden="true" className="relative -mx-6 h-72 md:-mx-10 md:h-80">
+        {/* back band: business skills, vermilion, slides right.
+            Steeper tilt on phones so more of it shows around the green band. */}
         <Band
           words={BUSINESS}
           repeat={3}
           direction="right"
           duration="20s"
-          tilt="rotate-3"
+          tilt="rotate-[7deg] md:rotate-3"
           layer="z-10"
           bandClass="bg-vermilion text-ink"
           dotClass="bg-forest"
@@ -130,7 +131,7 @@ export default function Skills() {
           repeat={1}
           direction="left"
           duration="32s"
-          tilt="-rotate-3"
+          tilt="-rotate-[7deg] md:-rotate-3"
           layer="z-20 shadow-[0_18px_28px_-16px_rgba(0,0,0,0.7)] border-y border-sand/20"
           bandClass="bg-forest text-paper"
           dotClass="bg-vermilion"
