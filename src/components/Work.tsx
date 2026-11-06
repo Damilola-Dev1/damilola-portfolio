@@ -138,8 +138,8 @@ export default function Work() {
                     room it needs and the screenshot fills the rest of the
                     card, so there is no empty gap. From md up it fills the
                     side of the card. */}
-                <div className="relative min-h-0 bg-sand">
-                  <div className="absolute inset-3 overflow-hidden rounded-lg shadow-[0_12px_24px_-12px_rgba(21,19,15,0.35)] md:inset-10">
+                <div className="relative min-h-0 bg-forest md:border-l md:border-paper/10">
+                  <div className="absolute inset-3 overflow-hidden rounded-lg ring-1 ring-paper/15 shadow-[0_12px_24px_-12px_rgba(0,0,0,0.6)] md:inset-10">
                     {p.image ? (
                       <img
                         src={p.image}

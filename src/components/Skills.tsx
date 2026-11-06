@@ -115,7 +115,7 @@ export default function Skills() {
     >
       {/* the crossing bands. Compact on phones, full size on laptops. */}
       <div aria-hidden="true" className="relative -mx-6 h-48 md:-mx-10 md:h-80">
-        {/* back band: business skills, vermilion, slides right.
+        {/* back band: business skills, paper, slides right.
             On phones it sits lower, so its words are not covered. */}
         <Band
           words={BUSINESS}
@@ -125,8 +125,8 @@ export default function Skills() {
           tilt="rotate-[4deg] md:rotate-3"
           layer="z-10"
           position="top-[70%] md:top-1/2"
-          bandClass="bg-vermilion text-ink"
-          dotClass="bg-forest"
+          bandClass="bg-paper text-ink"
+          dotClass="bg-vermilion"
         />
         {/* front band: technical skills, forest, slides left.
             On phones it sits higher. */}
@@ -139,7 +139,7 @@ export default function Skills() {
           layer="z-20 shadow-[0_18px_28px_-16px_rgba(0,0,0,0.7)] border-y border-sand/20"
           position="top-[30%] md:top-1/2"
           bandClass="bg-forest text-paper"
-          dotClass="bg-vermilion"
+          dotClass="bg-sand"
         />
       </div>
 
