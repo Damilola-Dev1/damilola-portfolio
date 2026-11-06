@@ -9,7 +9,6 @@ import {
   LinkedinLogo,
   TiktokLogo,
   WhatsappLogo,
-  X as CloseIcon,
   XLogo,
 } from "@phosphor-icons/react";
 
@@ -115,7 +114,6 @@ export default function Contact() {
   const [errorText, setErrorText] = useState("");
 
   const closeBtnRef = useRef<HTMLButtonElement>(null);
-  const xBtnRef = useRef<HTMLButtonElement>(null);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
 
   // The success popup is open whenever the form has just been sent
@@ -147,17 +145,9 @@ export default function Contact() {
         e.preventDefault();
         setStatus("idle");
       } else if (e.key === "Tab") {
-        // Two buttons in the popup (X and Close): cycle between them so focus
-        // never leaves the popup
+        // The close button is the only thing to focus, so keep focus on it
         e.preventDefault();
-        const first = xBtnRef.current;
-        const last = closeBtnRef.current;
-        if (!first || !last) return;
-        const goingBack = e.shiftKey;
-        if (document.activeElement === last && !goingBack) first.focus();
-        else if (document.activeElement === first && goingBack) last.focus();
-        else if (goingBack) first.focus();
-        else last.focus();
+        closeBtnRef.current?.focus();
       }
     };
     document.addEventListener("keydown", onKeyDown);
@@ -372,17 +362,8 @@ export default function Contact() {
             aria-modal="true"
             aria-labelledby="sent-title"
             aria-describedby="sent-desc"
-            className="relative w-full max-w-sm rounded-3xl bg-paper p-7 text-center text-ink shadow-2xl"
+            className="w-full max-w-sm rounded-3xl bg-paper p-7 text-center text-ink shadow-2xl"
           >
-            <button
-              ref={xBtnRef}
-              type="button"
-              onClick={closeModal}
-              aria-label="Close"
-              className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-ink/10 text-ink transition-colors hover:bg-ink/20"
-            >
-              <CloseIcon size={18} weight="bold" aria-hidden="true" />
-            </button>
             <CheckCircle
               size={56}
               weight="fill"
