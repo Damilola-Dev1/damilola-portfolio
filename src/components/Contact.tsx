@@ -26,13 +26,16 @@ import {
 //                "Send message" opens the visitor's email app with the
 //                message already written to your EMAIL.
 // ---------------------------------------------------------------------------
-const EMAIL: string = "";
-const WHATSAPP: string = "";
+const EMAIL: string = "thedamilola123@gmail.com";
+const WHATSAPP: string = "2349063667585";
 const GITHUB: string = "https://github.com/Damilola-Dev1";
-const LINKEDIN: string = "";
-const INSTAGRAM: string = "";
-const X_TWITTER: string = "";
-const TIKTOK: string = "";
+const LINKEDIN: string = "www.linkedin.com/in/damilola-frontend-developer";
+const INSTAGRAM: string =
+  "https://www.instagram.com/theglobaldeveloper?vrfl=NGQ2OHBramVoNWY5&utm_source=qr";
+const X_TWITTER: string =
+  "https://x.com/the_damilola123?s=11&t=n88-u6fX-XvRa9ZEJnNGKQ";
+const TIKTOK: string =
+  "https://www.tiktok.com/@theglobaldeveloper?_r=1&_t=ZS-9BAukW09W68";
 const FACEBOOK: string = "";
 const FORM_ENDPOINT: string = "";
 
