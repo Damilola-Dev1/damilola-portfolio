@@ -8,11 +8,10 @@ gsap.registerPlugin(ScrollTrigger);
 // Opening photo. It reuses the photo from the home page.
 const OPENING_SRC = "/about.jpg";
 
-// OPTIONAL second photo (you at your laptop or desk).
-// 1. Put it in the `public` folder (for example public/working.jpg)
-// 2. Set this to "/working.jpg"
-// While it is empty, the photo spot is simply left out.
-const WORKING_SRC = "";
+// Second photo, shown in the "What I enjoy building" section.
+// The file lives in the `public` folder (public/moreinfo2.jpeg).
+// Set this to "" to leave the photo out.
+const WORKING_SRC = "/moreinfo2.jpeg";
 
 const JOURNEY = [
   {
@@ -21,12 +20,12 @@ const JOURNEY = [
     text: "My interest in the web started here. It showed me how an idea could become something people can actually use online.",
   },
   {
-    year: "2023",
+    year: "2023 – 2025",
     title: "HTML, CSS and JavaScript",
-    text: "I began learning web development more deeply, one layer at a time.",
+    text: "I began learning web development more deeply, one layer at a time. A broken laptop forced a pause along the way, but I picked it back up.",
   },
   {
-    year: "Then",
+    year: "2026",
     title: "React and TypeScript",
     text: "I became more interested in building interactive interfaces and applications.",
   },
@@ -44,16 +43,57 @@ const QUESTIONS = [
   "What should visitors or users be able to do?",
 ];
 
-const BUILDS = [
+// Each card has one or more links.
+// `href` opens a live site in a new tab. `to` is a link inside this site.
+type BuildLink =
+  | { label: string; href: string }
+  | { label: string; to: string };
+
+type Build = {
+  title: string;
+  text: string;
+  links: BuildLink[];
+};
+
+const BUILDS: Build[] = [
   {
     title: "Websites for businesses",
     text: "Responsive websites that help businesses present their services, establish credibility and make it easier for potential customers to get in touch.",
+    links: [
+      {
+        label: "See Pwesh Beauty Hub",
+        href: "https://pwesh-beauty-hub.netlify.app/",
+      },
+    ],
   },
   {
     title: "Web applications",
     text: "Functional applications that solve practical problems, organise information and simplify everyday processes for individuals, communities and organisations.",
+    links: [
+      {
+        label: "See Reformers",
+        href: "https://reformers-community-app.web.app/login",
+      },
+      // Cedars has no live link yet, so this scrolls to the Projects section.
+      // When it is live, replace `to: "/#work"` with `href: "https://..."`.
+      { label: "See Cedars School Admin", to: "/#work" },
+    ],
   },
 ];
+
+const buildLinkClass =
+  "group inline-flex items-center gap-3 text-xl font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-8 transition-colors hover:text-vermilion md:text-2xl";
+
+function Arrow() {
+  return (
+    <span
+      aria-hidden="true"
+      className="inline-block transition-transform duration-300 group-hover:translate-x-2"
+    >
+      <span className="nudge inline-block">→</span>
+    </span>
+  );
+}
 
 export default function MoreAbout() {
   const pageRef = useRef<HTMLElement>(null);
@@ -260,10 +300,11 @@ export default function MoreAbout() {
           </h2>
 
           {WORKING_SRC && (
-            <div className="reveal relative mt-12 aspect-[16/9] w-full overflow-hidden rounded-3xl bg-paper">
+            <div className="reveal relative mt-12 aspect-[4/5] w-full overflow-hidden rounded-3xl bg-paper sm:aspect-[4/3] md:aspect-[16/9]">
               <img
                 src={WORKING_SRC}
-                alt="Damilola Samuel working at his laptop"
+                alt="Damilola Samuel"
+                loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
@@ -281,20 +322,28 @@ export default function MoreAbout() {
                 <p className="mt-4 text-lg leading-relaxed text-ink/85">
                   {b.text}
                 </p>
-                {/* TODO: point this at the project you want to show for this
-                    kind of work, for example to="/#work" or an external link. */}
-                <Link
-                  to="/#work"
-                  className="group mt-8 inline-flex items-center gap-3 text-xl font-semibold text-forest underline decoration-vermilion decoration-2 underline-offset-8 transition-colors hover:text-vermilion md:text-2xl"
-                >
-                  See my work
-                  <span
-                    aria-hidden="true"
-                    className="inline-block transition-transform duration-300 group-hover:translate-x-2"
-                  >
-                    <span className="nudge inline-block">→</span>
-                  </span>
-                </Link>
+                <div className="mt-8 flex flex-col items-start gap-4">
+                  {b.links.map((l) =>
+                    "href" in l ? (
+                      <a
+                        key={l.label}
+                        href={l.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={buildLinkClass}
+                      >
+                        {l.label}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                        <Arrow />
+                      </a>
+                    ) : (
+                      <Link key={l.label} to={l.to} className={buildLinkClass}>
+                        {l.label}
+                        <Arrow />
+                      </Link>
+                    ),
+                  )}
+                </div>
               </div>
             ))}
           </div>
