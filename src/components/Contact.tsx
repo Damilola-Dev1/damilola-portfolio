@@ -29,15 +29,13 @@ import {
 const EMAIL: string = "";
 const WHATSAPP: string = "2349063667585";
 const GITHUB: string = "https://github.com/Damilola-Dev1";
-const LINKEDIN: string = "www.linkedin.com/in/damilola-frontend-developer";
-const INSTAGRAM: string =
-  "https://www.instagram.com/theglobaldeveloper?vrfl=NGQ2OHBramVoNWY5&utm_source=qr";
-const X_TWITTER: string =
-  "https://x.com/the_damilola123?s=11&t=n88-u6fX-XvRa9ZEJnNGKQ";
-const TIKTOK: string =
-  "https://www.tiktok.com/@theglobaldeveloper?_r=1&_t=ZS-9BAukW09W68";
+const LINKEDIN: string =
+  "https://www.linkedin.com/in/damilola-frontend-developer";
+const INSTAGRAM: string = "https://www.instagram.com/theglobaldeveloper";
+const X_TWITTER: string = "https://x.com/the_damilola123";
+const TIKTOK: string = "https://www.tiktok.com/@theglobaldeveloper";
 const FACEBOOK: string = "";
-const FORM_ENDPOINT: string = "";
+const FORM_ENDPOINT: string = "https://formspree.io/f/moeebojz";
 
 const iconProps = { size: 20, weight: "fill" as const, "aria-hidden": true };
 
