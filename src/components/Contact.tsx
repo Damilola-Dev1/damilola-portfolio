@@ -39,7 +39,7 @@ const TIKTOK: string =
 const FACEBOOK: string = "";
 const FORM_ENDPOINT: string = "";
 
-const iconProps = { size: 26, weight: "fill" as const, "aria-hidden": true };
+const iconProps = { size: 20, weight: "fill" as const, "aria-hidden": true };
 
 const ALL_LINKS = [
   {
@@ -105,7 +105,7 @@ const LINKS = ALL_LINKS.filter((l) => l.value);
 type Status = "idle" | "sending" | "sent" | "error" | "opened" | "demo";
 
 const field =
-  "block w-full rounded-2xl border border-ink/30 bg-transparent px-5 py-4 text-base text-ink placeholder:text-ink/60";
+  "block w-full rounded-2xl border border-ink/30 bg-transparent px-4 py-3 text-base text-ink placeholder:text-ink/60";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -165,13 +165,13 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="rounded-t-[2.5rem] bg-paper px-6 py-24 text-ink md:rounded-t-[4rem] md:px-10 md:py-32"
+      className="rounded-t-[2.5rem] bg-paper px-6 py-20 text-ink md:rounded-t-[4rem] md:px-10 md:py-32"
     >
       <div className="mx-auto max-w-xl text-center">
         <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
           Let's work together.
         </h2>
-        <p className="mt-5 text-lg text-ink/85 md:text-xl">
+        <p className="mt-4 text-base text-ink/85 md:text-xl">
           Hiring a frontend developer, or need a website for your business? Send
           me a message.
         </p>
@@ -213,7 +213,7 @@ export default function Contact() {
             <textarea
               name="message"
               required
-              rows={5}
+              rows={4}
               placeholder="Tell me about your project"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -224,7 +224,7 @@ export default function Contact() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="mt-2 w-full rounded-full bg-forest px-10 py-4 text-lg font-bold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
+            className="mt-2 w-full rounded-full bg-forest px-10 py-3.5 text-base font-semibold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
           >
             {status === "sending" ? "Sending…" : "Send message"}
           </button>
@@ -239,7 +239,7 @@ export default function Contact() {
         </form>
 
         {LINKS.length > 0 && (
-          <ul className="mt-8 flex flex-wrap justify-center gap-3">
+          <ul className="mt-8 flex flex-wrap justify-center gap-2.5">
             {LINKS.map((l) => (
               <li key={l.label}>
                 <a
@@ -247,7 +247,7 @@ export default function Contact() {
                   {...(l.external
                     ? { target: "_blank", rel: "noreferrer" }
                     : {})}
-                  className="flex h-14 w-14 items-center justify-center rounded-full bg-ink/10 text-ink transition-colors hover:bg-ink/20"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-ink/10 text-ink transition-colors hover:bg-ink/20"
                 >
                   {l.icon}
                   <span className="sr-only">
