@@ -2,55 +2,50 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 
 // ---------------------------------------------------------------------------
-// DEMO CONTENT. Everything marked below is a placeholder so you can see the
-// layout.
-// 1. Replace the reviews in REVIEWS with real ones (with the client's OK).
-// 2. GOOGLE_URL: your Google Business Profile link. GOOGLE_RATING: the rating
-//    Google really shows. Leave GOOGLE_URL as "" to hide the link.
-// 3. BOOKING_URL: your booking link (for example a Calendly link). It opens
-//    when someone taps "Can we book a call?" in the chat.
-// 4. Set DEMO to false to remove the "Demo content" note.
+// PROJECT NOTES. Damilola explains each project in his own words, in the
+// phone chat. There are no client quotes here. When a real client gives you a
+// quote (with their OK), you can add it as another item in NOTES.
+//
+// BOOKING_URL: your booking link (for example a Calendly link). While it is
+// empty, the "Can we book a call?" button is hidden.
 // ---------------------------------------------------------------------------
-const DEMO = true;
-const GOOGLE_URL = "https://example.com";
-const GOOGLE_RATING = "5.0";
-const BOOKING_URL = "https://example.com";
+const BOOKING_URL: string = "";
 
-type Review = {
-  name: string;
-  role: string; // what you built for them
-  text: string; // their words, shown in the chat
-  quote: string; // a short line that pops out beside the phone
+type Note = {
+  name: string; // project name
+  role: string; // what kind of project it is
+  text: string; // Damilola's words, shown in the chat
+  badge: string; // a short line that pops out beside the phone
   pill: { side: "left" | "right"; top: string; extra?: string; rotate: number };
 };
 
-const REVIEWS: Review[] = [
+const NOTES: Note[] = [
   {
-    name: "Demo Client A",
-    role: "Business website",
-    text: "Demo review. Replace this with what a real client said about the website you built for them.",
-    quote: "Demo quote: clear and reliable",
+    name: "Cedars School Admin",
+    role: "School admin app",
+    text: "I built an admin system for a school. Fee payments get a numbered receipt, absent students are flagged for follow-up, and results are published only after the administrator approves them.",
+    badge: "Fees, attendance and results",
     pill: { side: "left", top: "16%", rotate: -5 },
   },
   {
-    name: "Demo Client B",
-    role: "Web app",
-    text: "Demo review. A few lines is a good length. It can be a little longer than the first one, so you can see how the chat bubble grows to fit the words.",
-    quote: "Demo quote: easy to work with",
+    name: "The Reformers Nation",
+    role: "Community app",
+    text: "A community app where new members register and a leader approves them first. Members then see their next meeting and assignments, and leaders manage members and post announcements. Real members use it.",
+    badge: "Used by real members",
     pill: { side: "right", top: "30%", extra: "1rem", rotate: 4 },
   },
   {
-    name: "Demo Client C",
+    name: "Pwesh Beauty Hub",
     role: "Landing page",
-    text: "Demo review. Replace this with another real client's words.",
-    quote: "Demo quote: delivered on time",
+    text: "A landing page for a beauty training business. It is live, and real visitors use it.",
+    badge: "Live landing page",
     pill: { side: "left", top: "54%", extra: "2.5rem", rotate: 3 },
   },
   {
-    name: "Demo Client D",
-    role: "Business website",
-    text: "Demo review. Short and sweet works too.",
-    quote: "Demo quote: highly recommend",
+    name: "Expense Tracker",
+    role: "Web app",
+    text: "A ledger-style expense tracker in plain JavaScript, HTML and CSS. You add, edit and delete entries, and it checks your inputs. It is being used to track real expenses.",
+    badge: "Tracking real expenses",
     pill: { side: "right", top: "72%", rotate: -4 },
   },
 ];
@@ -71,52 +66,29 @@ const CHIPS: { label: string; reply: string; action: Action }[] = [
     reply: "Thanks for stopping by. Send me a message about the role.",
     action: { label: "Send me a message", href: "#contact" },
   },
-  {
-    label: "Can we book a call?",
-    reply: "Sure. Pick a time that suits you.",
-    action: { label: "Book a call", href: BOOKING_URL, external: true },
-  },
+  ...(BOOKING_URL
+    ? [
+        {
+          label: "Can we book a call?",
+          reply: "Sure. Pick a time that suits you.",
+          action: {
+            label: "Book a call",
+            href: BOOKING_URL,
+            external: true,
+          },
+        },
+      ]
+    : []),
 ];
 
 type Msg = { id: number; from: "me" | "bot"; text: string; action?: Action };
 
-const N = REVIEWS.length;
+const N = NOTES.length;
 
 // Half the phone's width (w-80 = 20rem) plus a gap, so the pills sit beside it
 const PHONE_HALF = "10rem";
 
-const initials = (name: string) =>
-  name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-function Star({ className = "h-3.5 w-3.5" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      className={className}
-      fill="currentColor"
-    >
-      <polygon points="10,1.5 12.6,7.1 18.7,7.8 14.2,12 15.4,18 10,15 4.6,18 5.8,12 1.3,7.8 7.4,7.1" />
-    </svg>
-  );
-}
-
-function Stars() {
-  return (
-    <span aria-hidden="true" className="flex gap-0.5 text-vermilion">
-      {Array.from({ length: 5 }, (_, i) => (
-        <Star key={i} />
-      ))}
-    </span>
-  );
-}
-
-function pillStyle(p: Review["pill"]): CSSProperties {
+function pillStyle(p: Note["pill"]): CSSProperties {
   const offset = `calc(50% + ${PHONE_HALF} + 1.5rem + ${p.extra ?? "0px"})`;
   return {
     top: p.top,
@@ -166,11 +138,30 @@ function BotBubble({ text, action }: { text: string; action?: Action }) {
   );
 }
 
+// One project note: Damilola's portrait, green bubble, project name above
+function NoteBubble({ note }: { note: Note }) {
+  return (
+    <div aria-hidden="true" className="chat-in flex items-end gap-2">
+      <img
+        src="/portrait.png"
+        alt=""
+        className="h-8 w-8 shrink-0 rounded-full bg-sand object-cover object-[50%_0%]"
+      />
+      <div className="min-w-0 rounded-2xl rounded-bl-md bg-forest px-3.5 py-3 text-paper">
+        <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-sand">
+          {note.name} · {note.role}
+        </p>
+        <p className="mt-1.5 text-[0.85rem] leading-relaxed">{note.text}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function Reviews() {
   const [reduced] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
-  // 0 = empty chat, 1..N = that many reviews shown, N + 1 = closing bubble too
+  // 0 = empty chat, 1..N = that many notes shown, N + 1 = closing bubble too
   const [shown, setShown] = useState(reduced ? N + 1 : 0);
   const [typing, setTyping] = useState(false);
   const [fading, setFading] = useState(false);
@@ -202,7 +193,7 @@ export default function Reviews() {
           await wait(1000); // "typing..." dots
           setTyping(false);
           setShown(i + 1);
-          await wait(3000); // time to read
+          await wait(4500); // time to read
         }
         setShown(N + 1);
         await wait(6500);
@@ -270,42 +261,20 @@ export default function Reviews() {
       className="bg-ink px-6 py-24 text-paper md:px-10 md:py-32"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
-              What clients say
-            </h2>
-            <p className="mt-5 max-w-xl text-lg text-sand md:text-xl">
-              Reviews from people I've built for.
-            </p>
-            {DEMO && (
-              <p className="mt-4 inline-block rounded-full border border-sand/40 px-4 py-1.5 text-sm text-sand">
-                Demo content. Replace the reviews and links in Reviews.tsx
-                before you publish.
-              </p>
-            )}
-          </div>
-
-          {GOOGLE_URL && (
-            <a
-              href={GOOGLE_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 self-start font-semibold underline decoration-vermilion decoration-2 underline-offset-4 md:self-auto"
-            >
-              <Star className="h-4 w-4 text-vermilion" />
-              {GOOGLE_RATING} on Google
-              <span aria-hidden="true">↗</span>
-              <span className="sr-only">(opens in a new tab)</span>
-            </a>
-          )}
+        <div>
+          <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
+            Project notes
+          </h2>
+          <p className="mt-5 max-w-xl text-lg text-sand md:text-xl">
+            What each project does, in my own words.
+          </p>
         </div>
 
-        {/* the same reviews as a plain list, for screen readers */}
+        {/* the same notes as a plain list, for screen readers */}
         <ul className="sr-only">
-          {REVIEWS.map((r) => (
-            <li key={r.name}>
-              {r.text} {r.name}, {r.role}. 5 out of 5 stars.
+          {NOTES.map((n) => (
+            <li key={n.name}>
+              {n.name}, {n.role}. {n.text}
             </li>
           ))}
         </ul>
@@ -316,7 +285,7 @@ export default function Reviews() {
             aria-hidden="true"
             className={`pointer-events-none absolute inset-0 hidden lg:block ${fade}`}
           >
-            {REVIEWS.map(
+            {NOTES.map(
               (r, i) =>
                 shown > i && (
                   <div
@@ -326,8 +295,8 @@ export default function Reviews() {
                   >
                     <div className="pill-in">
                       <span className="pill-bob inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2.5 text-sm font-semibold text-ink">
-                        <Star className="h-3.5 w-3.5 text-vermilion" />
-                        {r.quote}
+                        <span className="h-2 w-2 rounded-full bg-vermilion" />
+                        {r.badge}
                       </span>
                     </div>
                   </div>
@@ -348,10 +317,8 @@ export default function Reviews() {
               />
 
               <div className="bg-forest px-5 pb-3 pt-10 text-paper">
-                <p className="font-display text-lg font-bold">
-                  Client messages
-                </p>
-                <p className="text-xs text-sand">{N} reviews</p>
+                <p className="font-display text-lg font-bold">Project notes</p>
+                <p className="text-xs text-sand">{N} projects</p>
               </div>
 
               {/* the chat */}
@@ -365,26 +332,8 @@ export default function Reviews() {
                 }}
               >
                 <div className={`flex flex-col gap-3 ${fade}`}>
-                  {REVIEWS.slice(0, shown).map((r) => (
-                    <div
-                      key={r.name}
-                      aria-hidden="true"
-                      className="chat-in flex items-end gap-2"
-                    >
-                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-forest text-[0.65rem] font-bold text-paper">
-                        {initials(r.name)}
-                      </span>
-                      <div className="min-w-0 rounded-2xl rounded-bl-md border border-ink/10 bg-sand/45 px-3.5 py-3">
-                        <p className="text-[0.85rem] leading-relaxed">
-                          {r.text}
-                        </p>
-                        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.7rem]">
-                          <span className="font-semibold">{r.name}</span>
-                          <span className="text-forest">{r.role}</span>
-                          <Stars />
-                        </div>
-                      </div>
-                    </div>
+                  {NOTES.slice(0, shown).map((n) => (
+                    <NoteBubble key={n.name} note={n} />
                   ))}
 
                   {shown > N && (
