@@ -102,7 +102,7 @@ const LINKS = ALL_LINKS.filter((l) => l.value);
 type Status = "idle" | "sending" | "sent" | "error" | "opened" | "demo";
 
 const field =
-  "block w-full rounded-2xl border border-paper/25 bg-paper/5 px-5 py-4 text-base text-paper placeholder:text-paper/60";
+  "block w-full rounded-2xl border border-ink/30 bg-transparent px-5 py-4 text-base text-ink placeholder:text-ink/60";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -162,13 +162,13 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="rounded-t-[2.5rem] bg-forest px-6 pb-16 pt-24 text-paper md:rounded-t-[4rem] md:px-10 md:pb-20 md:pt-32"
+      className="rounded-t-[2.5rem] bg-paper px-6 py-24 text-ink md:rounded-t-[4rem] md:px-10 md:py-32"
     >
       <div className="mx-auto max-w-xl text-center">
         <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
           Let's work together.
         </h2>
-        <p className="mt-5 text-lg text-sand md:text-xl">
+        <p className="mt-5 text-lg text-ink/85 md:text-xl">
           Hiring a frontend developer, or need a website for your business? Send
           me a message.
         </p>
@@ -221,11 +221,11 @@ export default function Contact() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="mt-2 w-full rounded-full bg-vermilion px-10 py-4 text-lg font-bold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
+            className="mt-2 w-full rounded-full bg-forest px-10 py-4 text-lg font-bold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
           >
             {status === "sending" ? "Sending…" : "Send message"}
           </button>
-          <p role="status" className="max-w-sm text-center text-sm text-sand">
+          <p role="status" className="max-w-sm text-center text-sm text-ink/85">
             {status === "sent" && "Thank you. Your message has been sent."}
             {status === "opened" &&
               "Your email app should open with the message ready to send."}
@@ -244,7 +244,7 @@ export default function Contact() {
                   {...(l.external
                     ? { target: "_blank", rel: "noreferrer" }
                     : {})}
-                  className="flex h-14 w-14 items-center justify-center rounded-full bg-paper/10 text-paper transition-colors hover:bg-paper/20"
+                  className="flex h-14 w-14 items-center justify-center rounded-full bg-ink/10 text-ink transition-colors hover:bg-ink/20"
                 >
                   {l.icon}
                   <span className="sr-only">
