@@ -106,7 +106,7 @@ export default function Nav() {
 
           {/* md and up: links inside the pill */}
           <ul className="hidden items-center gap-6 text-sm md:flex">
-            {links.slice(1).map((link) => (
+            {links.map((link) => (
               <li key={link.to}>
                 <Link
                   to={link.to}

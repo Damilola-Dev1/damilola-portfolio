@@ -1,14 +1,16 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="bg-ink px-6 py-10 text-sand md:px-10">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
         <p className="text-sm">© {new Date().getFullYear()} Damilola Samuel.</p>
-        <a
-          href="#top"
+        <Link
+          to="/#top"
           className="group inline-flex items-center gap-2 text-sm font-semibold text-paper"
         >
           <span className="underline decoration-vermilion decoration-2 underline-offset-4">
-            Back to the start
+            Back to home
           </span>
           {/* the arrow floats up a little on hover or tap */}
           <svg
@@ -24,7 +26,7 @@ export default function Footer() {
             <path d="M12 19V5" />
             <path d="M5 12l7-7 7 7" />
           </svg>
-        </a>
+        </Link>
       </div>
     </footer>
   );
