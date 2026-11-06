@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
+  CheckCircle,
   EnvelopeSimple,
   FacebookLogo,
   GithubLogo,
@@ -8,6 +9,7 @@ import {
   LinkedinLogo,
   TiktokLogo,
   WhatsappLogo,
+  X as CloseIcon,
   XLogo,
 } from "@phosphor-icons/react";
 
@@ -110,6 +112,16 @@ export default function Contact() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [errorText, setErrorText] = useState("");
+
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const xBtnRef = useRef<HTMLButtonElement>(null);
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
+
+  // The success popup is open whenever the form has just been sent
+  const modalOpen = status === "sent";
+
+  const closeModal = () => setStatus("idle");
 
   // The chat in the Reviews section can send a typed message down to here
   useEffect(() => {
@@ -121,8 +133,48 @@ export default function Contact() {
     return () => window.removeEventListener("prefill-message", onPrefill);
   }, []);
 
+  // Popup behaviour: focus the close button, close on Escape, keep Tab inside
+  // the popup, stop the page behind it from scrolling, and give focus back to
+  // the Send button when it closes.
+  useEffect(() => {
+    if (!modalOpen) return;
+
+    const submitBtn = submitBtnRef.current;
+    closeBtnRef.current?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setStatus("idle");
+      } else if (e.key === "Tab") {
+        // Two buttons in the popup (X and Close): cycle between them so focus
+        // never leaves the popup
+        e.preventDefault();
+        const first = xBtnRef.current;
+        const last = closeBtnRef.current;
+        if (!first || !last) return;
+        const goingBack = e.shiftKey;
+        if (document.activeElement === last && !goingBack) first.focus();
+        else if (document.activeElement === first && goingBack) last.focus();
+        else if (goingBack) first.focus();
+        else last.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      submitBtn?.focus();
+    };
+  }, [modalOpen]);
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setErrorText("");
 
     // No form service set up: open the visitor's email app instead
     if (!FORM_ENDPOINT) {
@@ -153,9 +205,26 @@ export default function Contact() {
         setEmail("");
         setMessage("");
       } else {
+        // Formspree explains what went wrong, e.g. { errors: [{ message }] }
+        let detail = "";
+        try {
+          const data = await res.json();
+          if (Array.isArray(data?.errors) && data.errors[0]?.message) {
+            detail = String(data.errors[0].message);
+          }
+        } catch {
+          // ignore: fall back to the general message
+        }
+        setErrorText(
+          detail ||
+            "The message could not be sent. Please check your details and try again.",
+        );
         setStatus("error");
       }
     } catch {
+      setErrorText(
+        "Could not reach the server. Please check your internet connection and try again.",
+      );
       setStatus("error");
     }
   };
@@ -220,20 +289,50 @@ export default function Contact() {
           </label>
 
           <button
+            ref={submitBtnRef}
             type="submit"
             disabled={status === "sending"}
             className="mt-2 w-full rounded-full bg-forest px-10 py-3.5 text-base font-semibold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
           >
             {status === "sending" ? "Sending…" : "Send message"}
           </button>
-          <p role="status" className="max-w-sm text-center text-sm text-ink/85">
-            {status === "sent" && "Thank you. Your message has been sent."}
-            {status === "opened" &&
-              "Your email app should open with the message ready to send."}
-            {status === "demo" &&
-              "This form isn't connected yet. Please use one of the links below."}
-            {status === "error" && "Something went wrong. Please try again."}
-          </p>
+
+          {/* Errors: shown clearly, with another way to reach me */}
+          {status === "error" && (
+            <div
+              role="alert"
+              className="w-full rounded-2xl border border-ink/30 bg-ink/5 px-4 py-3 text-center text-sm text-ink"
+            >
+              <p className="font-semibold">Your message was not sent.</p>
+              <p className="mt-1 text-ink/85">{errorText}</p>
+              {WHATSAPP && (
+                <p className="mt-1 text-ink/85">
+                  You can also{" "}
+                  <a
+                    href={`https://wa.me/${WHATSAPP}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold underline underline-offset-2"
+                  >
+                    message me on WhatsApp
+                  </a>
+                  .
+                </p>
+              )}
+            </div>
+          )}
+
+          {(status === "opened" || status === "demo") && (
+            <p
+              role="status"
+              className="max-w-sm text-center text-sm text-ink/85"
+            >
+              {status === "opened" &&
+                "Your email app should open with the message ready to send."}
+              {status === "demo" &&
+                "This form isn't connected yet. Please use one of the links below."}
+            </p>
+          )}
         </form>
 
         {LINKS.length > 0 && (
@@ -258,6 +357,58 @@ export default function Contact() {
           </ul>
         )}
       </div>
+
+      {/* Success popup */}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/70 px-6 py-6"
+          onMouseDown={(e) => {
+            // Click (or tap) on the dark area outside the card closes it
+            if (e.target === e.currentTarget) closeModal();
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="sent-title"
+            aria-describedby="sent-desc"
+            className="relative w-full max-w-sm rounded-3xl bg-paper p-7 text-center text-ink shadow-2xl"
+          >
+            <button
+              ref={xBtnRef}
+              type="button"
+              onClick={closeModal}
+              aria-label="Close"
+              className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-ink/10 text-ink transition-colors hover:bg-ink/20"
+            >
+              <CloseIcon size={18} weight="bold" aria-hidden="true" />
+            </button>
+            <CheckCircle
+              size={56}
+              weight="fill"
+              aria-hidden="true"
+              className="mx-auto text-forest"
+            />
+            <h3
+              id="sent-title"
+              className="mt-4 font-display text-3xl font-extrabold leading-tight tracking-tight"
+            >
+              Message sent
+            </h3>
+            <p id="sent-desc" className="mt-3 text-base text-ink/85">
+              Thank you. I have your message and I will reply as soon as I can.
+            </p>
+            <button
+              ref={closeBtnRef}
+              type="button"
+              onClick={closeModal}
+              className="mt-6 w-full rounded-full bg-forest px-10 py-3.5 text-base font-semibold text-paper transition-transform hover:-translate-y-0.5"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
