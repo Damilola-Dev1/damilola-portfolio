@@ -95,7 +95,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="bg-forest px-6 py-24 text-paper md:px-10 md:py-32"
+      className="rounded-t-[2.5rem] bg-forest px-6 py-24 text-paper md:rounded-t-[4rem] md:px-10 md:py-32"
     >
       <div className="mx-auto max-w-xl text-center">
         <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
