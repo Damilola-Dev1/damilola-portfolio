@@ -101,7 +101,7 @@ export default function Work() {
               // of the cards underneath stay visible
               style={{ "--i": i } as CSSProperties}
             >
-              <article className="grid h-[28rem] grid-rows-[minmax(0,1fr)_auto] overflow-hidden rounded-3xl border border-ink/20 shadow-[0_-14px_24px_-18px_rgba(21,19,15,0.45)] md:h-[26rem] md:grid-cols-[2fr_3fr] md:grid-rows-[minmax(0,1fr)]">
+              <article className="grid h-[27rem] grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-3xl border border-ink/20 shadow-[0_-14px_24px_-18px_rgba(21,19,15,0.45)] md:h-[26rem] md:grid-cols-[2fr_3fr] md:grid-rows-[minmax(0,1fr)]">
                 {/* text side */}
                 <div className="flex min-h-0 flex-col bg-forest p-5 text-paper md:p-10">
                   <h3 className="font-display text-2xl font-extrabold leading-[1.02] tracking-tight md:text-4xl">
@@ -134,11 +134,12 @@ export default function Work() {
                   </div>
                 </div>
 
-                {/* screenshot side. On phones the screenshot sits in a wide
-                    box so none of it is cut off; from md up it fills the
+                {/* screenshot side. On phones the text above takes only the
+                    room it needs and the screenshot fills the rest of the
+                    card, so there is no empty gap. From md up it fills the
                     side of the card. */}
-                <div className="relative min-h-0 bg-sand p-3 md:p-0">
-                  <div className="relative aspect-[2.2/1] overflow-hidden rounded-lg shadow-[0_12px_24px_-12px_rgba(21,19,15,0.35)] md:absolute md:inset-10 md:aspect-auto">
+                <div className="relative min-h-0 bg-sand">
+                  <div className="absolute inset-3 overflow-hidden rounded-lg shadow-[0_12px_24px_-12px_rgba(21,19,15,0.35)] md:inset-10">
                     {p.image ? (
                       <img
                         src={p.image}
