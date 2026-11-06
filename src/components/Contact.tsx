@@ -26,7 +26,7 @@ import {
 //                "Send message" opens the visitor's email app with the
 //                message already written to your EMAIL.
 // ---------------------------------------------------------------------------
-const EMAIL: string = "thedamilola123@gmail.com";
+const EMAIL: string = "";
 const WHATSAPP: string = "2349063667585";
 const GITHUB: string = "https://github.com/Damilola-Dev1";
 const LINKEDIN: string = "www.linkedin.com/in/damilola-frontend-developer";
