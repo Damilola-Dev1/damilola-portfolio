@@ -5,13 +5,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Opening photo. It reuses the photo from the home page.
-const OPENING_SRC = "/about.jpg";
+// Opening photo at the top of the page (you at your laptop).
+// The file lives in the `public` folder (public/moreinfo2.jpeg).
+const OPENING_SRC = "/moreinfo2.jpeg";
 
 // Second photo, shown in the "What I enjoy building" section.
-// The file lives in the `public` folder (public/moreinfo2.jpeg).
+// It reuses the photo from the home page (public/about.jpg).
 // Set this to "" to leave the photo out.
-const WORKING_SRC = "/moreinfo2.jpeg";
+const WORKING_SRC = "/about.jpg";
 
 const JOURNEY = [
   {
@@ -292,7 +293,22 @@ export default function MoreAbout() {
       {/* 4. WHAT I BUILD */}
       <section className="bg-sand px-6 py-24 text-ink md:px-10 md:py-32">
         <div className="mx-auto max-w-6xl">
-          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+          <div
+            className={`grid items-center gap-12 md:gap-20 ${
+              WORKING_SRC ? "md:grid-cols-[4fr_6fr]" : ""
+            }`}
+          >
+            {WORKING_SRC && (
+              <div className="reveal relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl bg-paper shadow-[0_24px_40px_-24px_rgba(21,19,15,0.4)]">
+                <img
+                  src={WORKING_SRC}
+                  alt="Damilola Samuel"
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            )}
+
             <div>
               <p className="reveal font-mono text-xs uppercase tracking-widest text-forest">
                 What I enjoy building
@@ -306,17 +322,6 @@ export default function MoreAbout() {
                 product is meant to serve.
               </p>
             </div>
-
-            {WORKING_SRC && (
-              <div className="reveal relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl bg-paper md:mx-0 md:justify-self-end">
-                <img
-                  src={WORKING_SRC}
-                  alt="Damilola Samuel"
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-            )}
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-2">
