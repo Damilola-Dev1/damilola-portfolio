@@ -9,7 +9,7 @@ import type { CSSProperties, FormEvent } from "react";
 // BOOKING_URL: your booking link (for example a Calendly link). While it is
 // empty, the "Can we book a call?" button is hidden.
 // ---------------------------------------------------------------------------
-const BOOKING_URL: string = "";
+const BOOKING_URL: string = "https://calendly.com/thedamilola123/30min";
 
 type Note = {
   name: string; // project name

@@ -4,9 +4,41 @@ import { Link, useLocation } from "react-router-dom";
 const links = [
   { to: "/#top", label: "Home" },
   { to: "/#about", label: "About" },
-  { to: "/#skills", label: "Skills" },
-  { to: "/#work", label: "Work" },
+  { to: "/#work", label: "Projects" },
 ];
+
+// Your Calendly link, for example "https://calendly.com/your-name/15min".
+// While this is empty, the button says "Contact" and scrolls to the contact
+// form instead, so nothing is broken.
+const CALENDLY_URL: string = "https://calendly.com/thedamilola123/30min";
+
+function BookCall({
+  className,
+  onClick,
+}: {
+  className: string;
+  onClick?: () => void;
+}) {
+  if (!CALENDLY_URL) {
+    return (
+      <Link to="/#contact" onClick={onClick} className={className}>
+        Contact
+      </Link>
+    );
+  }
+  return (
+    <a
+      href={CALENDLY_URL}
+      target="_blank"
+      rel="noreferrer"
+      onClick={onClick}
+      className={className}
+    >
+      Book a call
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
 
 // On the home page the pill appears once the hero has scrolled out of view and
 // then stays fixed. On other pages (no hero) it is always showing.
@@ -85,12 +117,7 @@ export default function Nav() {
               </li>
             ))}
             <li>
-              <Link
-                to="/#contact"
-                className="block rounded-full bg-paper px-5 py-2 font-semibold text-ink transition-colors hover:bg-sand"
-              >
-                Contact
-              </Link>
+              <BookCall className="block rounded-full bg-paper px-5 py-2 font-semibold text-ink transition-colors hover:bg-sand" />
             </li>
           </ul>
 
@@ -149,13 +176,10 @@ export default function Nav() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/#contact"
+                <BookCall
                   onClick={close}
                   className="mt-4 block rounded-full bg-paper py-3.5 text-center text-lg font-semibold text-ink transition-colors hover:bg-sand"
-                >
-                  Contact
-                </Link>
+                />
               </div>
             </div>
           </div>
