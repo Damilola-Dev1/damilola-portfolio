@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="bg-ink px-6 py-10 text-sand md:px-10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <footer className="bg-forest px-6 text-sand md:px-10">
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 border-t border-paper/15 py-8 text-center">
         <p className="text-sm">
           © {new Date().getFullYear()} Damilola Samuel. Frontend developer in
           Lagos, Nigeria.

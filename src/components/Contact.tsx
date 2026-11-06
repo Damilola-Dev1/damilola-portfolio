@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
+import {
+  EnvelopeSimple,
+  FacebookLogo,
+  GithubLogo,
+  InstagramLogo,
+  LinkedinLogo,
+  TiktokLogo,
+  WhatsappLogo,
+  XLogo,
+} from "@phosphor-icons/react";
 
 // ---------------------------------------------------------------------------
-// FILL THESE IN. Anything you leave empty ("") is simply hidden.
+// FILL THESE IN. Anything you leave empty ("") is simply hidden, so you only
+// need the ones you use.
 //
 // EMAIL          your public email, e.g. "you@gmail.com"
-// LINKEDIN       your full profile link, e.g. "https://linkedin.com/in/yourname"
 // WHATSAPP       your number with country code, digits only, no + or spaces,
-//                e.g. "2348012345678" (Nigeria: 234 then the number without
+//                e.g. "2348012345678" (Nigeria: 234, then the number without
 //                the first 0)
+// The others     the full link to your profile, starting with https://
 // FORM_ENDPOINT  optional. If you make a free form at formspree.io and paste
 //                its link here (https://formspree.io/f/xxxxxxxx), messages go
 //                to your inbox from the page. While it is empty, pressing
@@ -16,26 +27,82 @@ import type { FormEvent } from "react";
 //                message already written to your EMAIL.
 // ---------------------------------------------------------------------------
 const EMAIL: string = "";
+const WHATSAPP: string = "";
 const GITHUB: string = "https://github.com/Damilola-Dev1";
 const LINKEDIN: string = "";
-const WHATSAPP: string = "";
+const INSTAGRAM: string = "";
+const X_TWITTER: string = "";
+const TIKTOK: string = "";
+const FACEBOOK: string = "";
 const FORM_ENDPOINT: string = "";
 
-const LINKS = [
-  EMAIL && { label: "Email", href: `mailto:${EMAIL}`, external: false },
-  GITHUB && { label: "GitHub", href: GITHUB, external: true },
-  LINKEDIN && { label: "LinkedIn", href: LINKEDIN, external: true },
-  WHATSAPP && {
+const iconProps = { size: 26, weight: "fill" as const, "aria-hidden": true };
+
+const ALL_LINKS = [
+  {
+    label: "Email",
+    value: EMAIL,
+    href: `mailto:${EMAIL}`,
+    external: false,
+    icon: <EnvelopeSimple {...iconProps} />,
+  },
+  {
     label: "WhatsApp",
+    value: WHATSAPP,
     href: `https://wa.me/${WHATSAPP}`,
     external: true,
+    icon: <WhatsappLogo {...iconProps} />,
   },
-].filter(Boolean) as { label: string; href: string; external: boolean }[];
+  {
+    label: "Instagram",
+    value: INSTAGRAM,
+    href: INSTAGRAM,
+    external: true,
+    icon: <InstagramLogo {...iconProps} />,
+  },
+  {
+    label: "Facebook",
+    value: FACEBOOK,
+    href: FACEBOOK,
+    external: true,
+    icon: <FacebookLogo {...iconProps} />,
+  },
+  {
+    label: "X",
+    value: X_TWITTER,
+    href: X_TWITTER,
+    external: true,
+    icon: <XLogo {...iconProps} />,
+  },
+  {
+    label: "GitHub",
+    value: GITHUB,
+    href: GITHUB,
+    external: true,
+    icon: <GithubLogo {...iconProps} />,
+  },
+  {
+    label: "TikTok",
+    value: TIKTOK,
+    href: TIKTOK,
+    external: true,
+    icon: <TiktokLogo {...iconProps} />,
+  },
+  {
+    label: "LinkedIn",
+    value: LINKEDIN,
+    href: LINKEDIN,
+    external: true,
+    icon: <LinkedinLogo {...iconProps} />,
+  },
+];
+
+const LINKS = ALL_LINKS.filter((l) => l.value);
 
 type Status = "idle" | "sending" | "sent" | "error" | "opened" | "demo";
 
 const field =
-  "block w-full rounded-2xl border border-paper/30 bg-paper/5 px-5 py-3.5 text-base text-paper placeholder:text-paper/60";
+  "block w-full rounded-2xl border border-paper/25 bg-paper/5 px-5 py-4 text-base text-paper placeholder:text-paper/60";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -95,7 +162,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="rounded-t-[2.5rem] bg-forest px-6 py-24 text-paper md:rounded-t-[4rem] md:px-10 md:py-32"
+      className="rounded-t-[2.5rem] bg-forest px-6 pb-16 pt-24 text-paper md:rounded-t-[4rem] md:px-10 md:pb-20 md:pt-32"
     >
       <div className="mx-auto max-w-xl text-center">
         <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
@@ -106,8 +173,11 @@ export default function Contact() {
           me a message.
         </p>
 
-        <form onSubmit={onSubmit} className="mt-10 space-y-4 text-left">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <form
+          onSubmit={onSubmit}
+          className="mt-10 flex flex-col items-center gap-4 text-left"
+        >
+          <div className="grid w-full gap-4 sm:grid-cols-2">
             <label>
               <span className="sr-only">Your name</span>
               <input
@@ -135,7 +205,7 @@ export default function Contact() {
               />
             </label>
           </div>
-          <label className="block">
+          <label className="block w-full">
             <span className="sr-only">Tell me about your project</span>
             <textarea
               name="message"
@@ -148,27 +218,25 @@ export default function Contact() {
             />
           </label>
 
-          <div className="flex flex-col items-center gap-4 pt-2">
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="rounded-full bg-paper px-8 py-3.5 font-semibold text-forest transition-transform hover:-translate-y-0.5 disabled:opacity-60"
-            >
-              {status === "sending" ? "Sending…" : "Send message"}
-            </button>
-            <p role="status" className="max-w-sm text-center text-sm text-sand">
-              {status === "sent" && "Thank you. Your message has been sent."}
-              {status === "opened" &&
-                "Your email app should open with the message ready to send."}
-              {status === "demo" &&
-                "This form isn't connected yet. Please use one of the links below."}
-              {status === "error" && "Something went wrong. Please try again."}
-            </p>
-          </div>
+          <button
+            type="submit"
+            disabled={status === "sending"}
+            className="mt-2 w-full rounded-full bg-vermilion px-10 py-4 text-lg font-bold text-paper transition-transform hover:-translate-y-0.5 disabled:opacity-60 sm:w-auto"
+          >
+            {status === "sending" ? "Sending…" : "Send message"}
+          </button>
+          <p role="status" className="max-w-sm text-center text-sm text-sand">
+            {status === "sent" && "Thank you. Your message has been sent."}
+            {status === "opened" &&
+              "Your email app should open with the message ready to send."}
+            {status === "demo" &&
+              "This form isn't connected yet. Please use one of the links below."}
+            {status === "error" && "Something went wrong. Please try again."}
+          </p>
         </form>
 
         {LINKS.length > 0 && (
-          <ul className="mt-10 flex flex-wrap justify-center gap-3">
+          <ul className="mt-8 flex flex-wrap justify-center gap-3">
             {LINKS.map((l) => (
               <li key={l.label}>
                 <a
@@ -176,12 +244,13 @@ export default function Contact() {
                   {...(l.external
                     ? { target: "_blank", rel: "noreferrer" }
                     : {})}
-                  className="inline-block rounded-full border border-paper/30 px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-paper/10"
+                  className="flex h-14 w-14 items-center justify-center rounded-full bg-paper/10 text-paper transition-colors hover:bg-paper/20"
                 >
-                  {l.label}
-                  {l.external && (
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  )}
+                  {l.icon}
+                  <span className="sr-only">
+                    {l.label}
+                    {l.external ? " (opens in a new tab)" : ""}
+                  </span>
                 </a>
               </li>
             ))}
