@@ -1,29 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* PALETTE: coffee, chocolate, milk + one terracotta accent.
-     Rule: 60% light (paper), 30% dark (ink), 10% accent (vermilion).
-     The class names stay the same so no component breaks:
-       paper     = milk (light sections)
-       ink       = espresso (dark sections)
-       forest    = chocolate (cards / one big section)
-       vermilion = terracotta (the ONE accent: buttons, underlines,
-                   one highlight word per section)
-     NOTE: on paper, use vermilion only for fills and large text.
-     Small links on paper should use chocolate. */
-  --color-paper: #f6efe6;
-  --color-ink: #1c1210;
-  --color-forest: #3b2118;
-  --color-vermilion: #d4521f;
-
-  /* New names, use these in components from now on */
-  --color-chocolate: #3b2118;
-  --color-coffee: #6b4332;
-
-  /* Sand is retired. It is kept only so old classes still compile and
-     now resolves to coffee. Replace each use of "sand" in the
-     components, then delete this line. */
-  --color-sand: #6b4332;
+  --color-paper: #f2ebdd;
+  --color-ink: #15130f;
+  --color-forest: #0e3b32;
+  --color-vermilion: #e8461e;
+  --color-sand: #d9cdb4;
 
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Instrument Sans", system-ui, sans-serif;
