@@ -292,23 +292,32 @@ export default function MoreAbout() {
       {/* 4. WHAT I BUILD */}
       <section className="bg-sand px-6 py-24 text-ink md:px-10 md:py-32">
         <div className="mx-auto max-w-6xl">
-          <p className="reveal font-mono text-xs uppercase tracking-widest text-forest">
-            What I enjoy building
-          </p>
-          <h2 className="reveal mt-4 font-display text-4xl font-extrabold leading-[1.02] tracking-tight md:text-6xl">
-            Two closely related things.
-          </h2>
-
-          {WORKING_SRC && (
-            <div className="reveal relative mt-12 aspect-[4/5] w-full overflow-hidden rounded-3xl bg-paper sm:aspect-[4/3] md:aspect-[16/9]">
-              <img
-                src={WORKING_SRC}
-                alt="Damilola Samuel"
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+            <div>
+              <p className="reveal font-mono text-xs uppercase tracking-widest text-forest">
+                What I enjoy building
+              </p>
+              <h2 className="reveal mt-4 font-display text-4xl font-extrabold leading-[1.02] tracking-tight md:text-6xl">
+                Two closely related things.
+              </h2>
+              <p className="reveal mt-6 max-w-md text-lg leading-relaxed text-ink/85">
+                Whether it’s a business website or a web application, I care
+                about the experience behind the interface and the purpose the
+                product is meant to serve.
+              </p>
             </div>
-          )}
+
+            {WORKING_SRC && (
+              <div className="reveal relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl bg-paper md:mx-0 md:justify-self-end">
+                <img
+                  src={WORKING_SRC}
+                  alt="Damilola Samuel"
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            )}
+          </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             {BUILDS.map((b) => (
@@ -347,12 +356,6 @@ export default function MoreAbout() {
               </div>
             ))}
           </div>
-
-          <p className="reveal mt-10 max-w-2xl text-lg leading-relaxed text-ink/85">
-            Whether it’s a business website or a web application, I care about
-            the experience behind the interface and the purpose the product is
-            meant to serve.
-          </p>
         </div>
       </section>
 
