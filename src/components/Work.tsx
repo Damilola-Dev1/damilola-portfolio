@@ -46,6 +46,12 @@ const PROJECTS: Project[] = [
     image: "/pwesh.jpg",
   },
   {
+    name: "Oluwakorede's Portfolio",
+    text: "A portfolio website for a content writer and community manager.",
+    url: "https://oluwakorede-eunice-portfolio.netlify.app/",
+    image: "/oluwakorede.png",
+  },
+  {
     name: "Expense Tracker",
     text: "A ledger-style expense tracker where you add, edit and delete entries, with input checks.",
     tools: ["JavaScript", "HTML", "CSS"],
