@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 
 // ---------------------------------------------------------------------------
-// PROJECT NOTES. Damilola explains each project in his own words, in the
-// phone chat. There are no client quotes here. When a real client gives you a
-// quote (with their OK), you can add it as another item in NOTES.
+// REVIEWS. Words from clients who read the wording and agreed to have it on
+// this site. The Expense Tracker is a personal project, so it is Damilola's
+// own words and is labelled that way. Only add a new review here when the
+// client has given their OK.
 //
 // BOOKING_URL: your booking link (for example a Calendly link). While it is
 // empty, the "Can we book a call?" button is hidden.
@@ -14,39 +15,46 @@ const BOOKING_URL: string = "https://calendly.com/thedamilola123/30min";
 type Note = {
   name: string; // project name
   role: string; // what kind of project it is
-  text: string; // Damilola's words, shown in the chat
+  text: string; // the review (or Damilola's words for the personal project)
   badge: string; // a short line that pops out beside the phone
   pill: { side: "left" | "right"; top: string; extra?: string; rotate: number };
 };
 
 const NOTES: Note[] = [
   {
-    name: "Cedars School Admin",
-    role: "School admin app",
-    text: "I built an admin system for a school. Fee payments get a numbered receipt, absent students are flagged for follow-up, and results are published only after the administrator approves them.",
-    badge: "Fees, attendance and results",
-    pill: { side: "left", top: "16%", rotate: -5 },
+    name: "PWESH Beauty Hub",
+    role: "Client project",
+    text: "We wanted a website that would properly showcase our beauty services and training programmes, and Damilola delivered just that. I particularly like how everything is presented. Visitors can easily find what they're looking for, view our work and make enquiries. It has given us a much better online presence.",
+    badge: "Live website",
+    pill: { side: "left", top: "10%", rotate: -5 },
   },
   {
-    name: "The Reformers Nation",
-    role: "Community app",
-    text: "A community app where new members register and a leader approves them first. Members then see their next meeting and assignments, and leaders manage members and post announcements. Real members use it.",
+    name: "Reformers Community App",
+    role: "Client / community project",
+    text: "Managing our community activities used to involve keeping track of several things separately. Having a platform where we can manage members, attendance, announcements and other activities has made things considerably easier. Damilola put a lot of thought into how the system works, and we appreciate having a tool that supports the way our community operates.",
     badge: "Used by real members",
-    pill: { side: "right", top: "30%", extra: "1rem", rotate: 4 },
+    pill: { side: "right", top: "24%", extra: "1rem", rotate: 4 },
   },
   {
-    name: "Pwesh Beauty Hub",
-    role: "Landing page",
-    text: "A landing page for a beauty training business. It is live, and real visitors use it.",
-    badge: "Live landing page",
-    pill: { side: "left", top: "54%", extra: "2.5rem", rotate: 3 },
+    name: "Cedars School Admin",
+    role: "School project",
+    text: "Having the different aspects of school administration organised in one platform makes a real difference. From managing student information and tracking fee payments to monitoring attendance and academic records, the system brings everything together in a way that is easier to follow. We particularly appreciate the thought put into making the different sections accessible and straightforward to use.",
+    badge: "Fees, attendance and results",
+    pill: { side: "left", top: "42%", extra: "2.5rem", rotate: 3 },
+  },
+  {
+    name: "Oluwakorede's Portfolio",
+    role: "Client project",
+    text: "I love how my portfolio turned out. I wanted something that would present my work professionally without making it feel too complicated, and the final website achieved that. It looks good, is easy to navigate and gives people a better impression of what I do. I'm genuinely happy with the outcome.",
+    badge: "Personal portfolio",
+    pill: { side: "right", top: "58%", rotate: -4 },
   },
   {
     name: "Expense Tracker",
-    role: "Web app",
-    text: "A ledger-style expense tracker in plain JavaScript, HTML and CSS. You add, edit and delete entries, and it checks your inputs. It is being used to track real expenses.",
-    badge: "Tracking real expenses",
-    pill: { side: "right", top: "72%", rotate: -4 },
+    role: "Personal project, not a review",
+    text: "A personal finance application designed to make tracking income and expenses simpler. It provides a straightforward way to record transactions, monitor spending and get a clearer picture of where money goes.",
+    badge: "Personal project",
+    pill: { side: "left", top: "76%", extra: "1rem", rotate: 4 },
   },
 ];
 
@@ -138,7 +146,7 @@ function BotBubble({ text, action }: { text: string; action?: Action }) {
   );
 }
 
-// One project note: Damilola's portrait, green bubble, project name above
+// One review: Damilola's portrait, green bubble, project name above
 function NoteBubble({ note }: { note: Note }) {
   return (
     <div aria-hidden="true" className="chat-in flex items-end gap-2">
@@ -193,7 +201,7 @@ export default function Reviews() {
           await wait(1000); // "typing..." dots
           setTyping(false);
           setShown(i + 1);
-          await wait(4500); // time to read
+          await wait(8000); // time to read (reviews are longer now)
         }
         setShown(N + 1);
         await wait(6500);
@@ -263,14 +271,14 @@ export default function Reviews() {
       <div className="mx-auto max-w-6xl">
         <div>
           <h2 className="font-display text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
-            Project notes
+            Reviews
           </h2>
           <p className="mt-5 max-w-xl text-lg text-sand md:text-xl">
-            What each project does, in my own words.
+            What people say about working with me.
           </p>
         </div>
 
-        {/* the same notes as a plain list, for screen readers */}
+        {/* the same reviews as a plain list, for screen readers */}
         <ul className="sr-only">
           {NOTES.map((n) => (
             <li key={n.name}>
@@ -317,7 +325,7 @@ export default function Reviews() {
               />
 
               <div className="bg-forest px-5 pb-3 pt-10 text-paper">
-                <p className="font-display text-lg font-bold">Project notes</p>
+                <p className="font-display text-lg font-bold">Reviews</p>
                 <p className="text-xs text-sand">{N} projects</p>
               </div>
 
