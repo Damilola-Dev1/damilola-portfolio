@@ -116,8 +116,8 @@ const AVATAR_TONES = [
   "bg-vermilion text-ink",
 ];
 
-// Half the phone's width on wide screens (md:max-w-[24rem]) plus a gap, so the pills sit beside it
-const PHONE_HALF = "12rem";
+// Half the phone's width on wide screens (md:max-w-[22rem]) plus a gap, so the pills sit beside it
+const PHONE_HALF = "11rem";
 
 function pillStyle(p: Note["pill"]): CSSProperties {
   const offset = `calc(50% + ${PHONE_HALF} + 1.5rem + ${p.extra ?? "0px"})`;
@@ -186,7 +186,7 @@ function NoteBubble({ note }: { note: Note }) {
         </span>
       )}
       <div className="min-w-0">
-        <div className="rounded-2xl rounded-bl-md bg-forest px-4 py-3.5 text-paper">
+        <div className="rounded-2xl rounded-bl-md bg-forest px-3.5 py-3.5 text-paper">
           <p className="text-[0.95rem] leading-[1.7]">{note.text}</p>
         </div>
         <p className="mt-1 text-[0.7rem] font-semibold">
@@ -391,7 +391,7 @@ export default function Reviews() {
             ref={phoneRef}
             role="group"
             aria-label="Chat with Damilola"
-            className="relative mx-auto w-full max-w-[22rem] rounded-[2.6rem] bg-sand p-2.5 md:max-w-[24rem]"
+            className="relative mx-auto w-full max-w-[19.5rem] rounded-[2.6rem] bg-sand p-2.5 md:max-w-[22rem]"
           >
             {/* side buttons, so it reads as a phone */}
             <span
@@ -406,20 +406,20 @@ export default function Reviews() {
               aria-hidden="true"
               className="absolute -right-[3px] top-36 h-20 w-[3px] rounded-r bg-sand"
             />
-            <div className="relative flex h-[36rem] flex-col overflow-hidden rounded-[2.1rem] bg-paper text-ink md:h-[42rem]">
+            <div className="relative flex h-[38rem] flex-col overflow-hidden rounded-[2.1rem] bg-paper text-ink md:h-[44rem]">
               <span
                 aria-hidden="true"
                 className="absolute left-1/2 top-2.5 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-ink"
               />
 
-              <div className="flex items-center gap-3 bg-forest px-5 pb-3 pt-10 text-paper">
+              <div className="flex items-center gap-3 bg-forest px-4 pb-3 pt-10 text-paper">
                 <div aria-hidden="true" className="flex -space-x-2">
                   {NOTES.filter((n) => n.kind === "review")
                     .slice(0, 3)
                     .map((n, i) => (
                       <span
                         key={n.name}
-                        className={`grid h-9 w-9 place-items-center rounded-full text-[0.65rem] font-bold ring-2 ring-forest ${AVATAR_TONES[i]}`}
+                        className={`grid h-8 w-8 place-items-center rounded-full text-[0.65rem] font-bold ring-2 ring-forest ${AVATAR_TONES[i]}`}
                       >
                         {n.initials}
                       </span>
@@ -450,7 +450,7 @@ export default function Reviews() {
                     "linear-gradient(to bottom, transparent 0, #000 2.5rem)",
                 }}
               >
-                <div className="flex min-h-full flex-col justify-end gap-4 px-4 py-4">
+                <div className="flex min-h-full flex-col justify-end gap-4 px-3 py-4">
                   <div className={`flex flex-col gap-4 ${fade}`}>
                     {NOTES.slice(0, shown).map((n) => (
                       <NoteBubble key={n.name} note={n} />
