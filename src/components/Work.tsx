@@ -10,8 +10,9 @@
 //   for example "View code" for a GitHub link.
 // - `tools` is optional. With no tools, the "Built with" line is hidden.
 // - `image` is optional. The screenshot sits in the public folder, so the
-//   path is just the file name, for example "/pwesh.jpg". With no image, a
-//   simple empty browser window is drawn instead.
+//   path is just the file name, for example "/pwesh.jpg". It is shown at its
+//   full width inside a small browser window. With no image, a simple empty
+//   browser window is drawn instead.
 
 import type { CSSProperties } from "react";
 
@@ -145,18 +146,48 @@ export default function Work() {
                     card, so there is no empty gap. From md up it fills the
                     side of the card. */}
                 <div className="relative min-h-0 bg-forest md:border-l md:border-paper/10">
-                  <div className="absolute inset-3 overflow-hidden rounded-lg ring-1 ring-paper/15 shadow-[0_12px_24px_-12px_rgba(0,0,0,0.6)] md:inset-10">
-                    {p.image ? (
-                      <img
-                        src={p.image}
-                        alt={`Screenshot of ${p.name}`}
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 block h-full w-full object-cover object-top"
-                      />
-                    ) : (
-                      <EmptyBrowser />
-                    )}
+                  <div className="absolute inset-3 flex items-center justify-center md:inset-10">
+                    {/* the screenshot shows at its full width inside a small
+                        browser window, so nothing is cut off at the sides.
+                        Hover (or tap) gives it a gentle zoom. */}
+                    <div className="group/shot relative max-h-full w-full overflow-hidden rounded-lg bg-paper ring-1 ring-paper/15 shadow-[0_12px_24px_-12px_rgba(0,0,0,0.6)]">
+                      {p.image ? (
+                        <>
+                          <div
+                            aria-hidden="true"
+                            className="flex items-center gap-1.5 border-b border-ink/10 bg-paper px-3 py-2"
+                          >
+                            <span className="h-2 w-2 rounded-full bg-forest/30" />
+                            <span className="h-2 w-2 rounded-full bg-forest/30" />
+                            <span className="h-2 w-2 rounded-full bg-forest/30" />
+                          </div>
+                          <img
+                            src={p.image}
+                            alt={`Screenshot of ${p.name}`}
+                            loading="lazy"
+                            decoding="async"
+                            className="block h-auto w-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:group-hover/shot:scale-[1.04]"
+                          />
+                        </>
+                      ) : (
+                        <div className="relative aspect-[16/10]">
+                          <EmptyBrowser />
+                        </div>
+                      )}
+                      {/* tapping the screenshot opens the site too. The
+                          "Visit site" button is the main link, so this one
+                          is hidden from keyboards and screen readers. */}
+                      {p.url && (
+                        <a
+                          href={p.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          tabIndex={-1}
+                          aria-hidden="true"
+                          className="absolute inset-0"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </article>
