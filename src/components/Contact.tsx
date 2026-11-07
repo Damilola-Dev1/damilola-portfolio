@@ -104,7 +104,7 @@ const LINKS = ALL_LINKS.filter((l) => l.value);
 type Status = "idle" | "sending" | "sent" | "error" | "opened" | "demo";
 
 const field =
-  "block w-full rounded-2xl border border-ink/30 bg-transparent px-4 py-3 text-base text-ink placeholder:text-ink/60";
+  "block w-full rounded-2xl border border-ink/55 bg-transparent px-4 py-3 text-base text-ink placeholder:text-ink/65";
 
 export default function Contact() {
   const [name, setName] = useState("");
