@@ -17,6 +17,8 @@ const READ_TIME = 3000;
 
 type Note = {
   name: string; // project name
+  initials: string; // two letters shown in the round avatar
+  kind: "review" | "own"; // a client review, or Damilola's own words
   role: string; // what kind of project it is
   text: string; // the review (or Damilola's words for the personal project)
   badge: string; // a short line that pops out beside the phone
@@ -26,6 +28,8 @@ type Note = {
 const NOTES: Note[] = [
   {
     name: "PWESH Beauty Hub",
+    initials: "PB",
+    kind: "review",
     role: "Client project",
     text: "We wanted a website that would properly showcase our beauty services and training programmes, and Damilola delivered just that. I particularly like how everything is presented. Visitors can easily find what they're looking for, view our work and make enquiries. It has given us a much better online presence.",
     badge: "Live website",
@@ -33,6 +37,8 @@ const NOTES: Note[] = [
   },
   {
     name: "Reformers Community App",
+    initials: "RC",
+    kind: "review",
     role: "Client / community project",
     text: "Managing our community activities used to involve keeping track of several things separately. Having a platform where we can manage members, attendance, announcements and other activities has made things considerably easier. Damilola put a lot of thought into how the system works, and we appreciate having a tool that supports the way our community operates.",
     badge: "Used by real members",
@@ -40,6 +46,8 @@ const NOTES: Note[] = [
   },
   {
     name: "Cedars School Admin",
+    initials: "CS",
+    kind: "review",
     role: "School project",
     text: "Having the different aspects of school administration organised in one platform makes a real difference. From managing student information and tracking fee payments to monitoring attendance and academic records, the system brings everything together in a way that is easier to follow. We particularly appreciate the thought put into making the different sections accessible and straightforward to use.",
     badge: "Fees, attendance and results",
@@ -47,6 +55,8 @@ const NOTES: Note[] = [
   },
   {
     name: "Oluwakorede's Portfolio",
+    initials: "OP",
+    kind: "review",
     role: "Client project",
     text: "I love how my portfolio turned out. I wanted something that would present my work professionally without making it feel too complicated, and the final website achieved that. It looks good, is easy to navigate and gives people a better impression of what I do. I'm genuinely happy with the outcome.",
     badge: "Personal portfolio",
@@ -54,6 +64,8 @@ const NOTES: Note[] = [
   },
   {
     name: "Expense Tracker",
+    initials: "ET",
+    kind: "own",
     role: "Personal project, not a review",
     text: "A personal finance application designed to make tracking income and expenses simpler. It provides a straightforward way to record transactions, monitor spending and get a clearer picture of where money goes.",
     badge: "Personal project",
@@ -95,6 +107,14 @@ const CHIPS: { label: string; reply: string; action: Action }[] = [
 type Msg = { id: number; from: "me" | "bot"; text: string; action?: Action };
 
 const N = NOTES.length;
+// the number shown under the headline counts client reviews only
+const REVIEW_COUNT = NOTES.filter((n) => n.kind === "review").length;
+// colours for the three overlapping avatars in the phone header
+const AVATAR_TONES = [
+  "bg-paper text-forest",
+  "bg-sand text-ink",
+  "bg-vermilion text-ink",
+];
 
 // Half the phone's width on wide screens (md:max-w-[24rem]) plus a gap, so the pills sit beside it
 const PHONE_HALF = "12rem";
@@ -149,20 +169,30 @@ function BotBubble({ text, action }: { text: string; action?: Action }) {
   );
 }
 
-// One review: Damilola's portrait, green bubble, project name above
+// One review: the client's round avatar, green bubble, project name underneath.
+// The personal project (kind "own") keeps Damilola's portrait.
 function NoteBubble({ note }: { note: Note }) {
   return (
     <div aria-hidden="true" className="chat-in flex items-end gap-2">
-      <img
-        src="/portrait.png"
-        alt=""
-        className="h-8 w-8 shrink-0 rounded-full bg-sand object-cover object-[50%_0%]"
-      />
-      <div className="min-w-0 rounded-2xl rounded-bl-md bg-forest px-4 py-3.5 text-paper">
-        <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-sand">
-          {note.name} · {note.role}
+      {note.kind === "own" ? (
+        <img
+          src="/portrait.png"
+          alt=""
+          className="h-8 w-8 shrink-0 rounded-full bg-sand object-cover object-[50%_0%]"
+        />
+      ) : (
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sand text-[0.65rem] font-bold text-ink">
+          {note.initials}
+        </span>
+      )}
+      <div className="min-w-0">
+        <div className="rounded-2xl rounded-bl-md bg-forest px-4 py-3.5 text-paper">
+          <p className="text-[0.95rem] leading-[1.7]">{note.text}</p>
+        </div>
+        <p className="mt-1 text-[0.7rem] font-semibold">
+          {note.name}
+          <span className="font-normal text-ink/70"> · {note.role}</span>
         </p>
-        <p className="mt-2 text-[0.95rem] leading-[1.7]">{note.text}</p>
       </div>
     </div>
   );
@@ -382,11 +412,27 @@ export default function Reviews() {
                 className="absolute left-1/2 top-2.5 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-ink"
               />
 
-              <div className="bg-forest px-5 pb-3 pt-10 text-paper">
-                <p className="font-display text-lg font-bold">Reviews</p>
-                <p className="text-xs text-sand">
-                  {typing ? "typing…" : `${N} projects`}
-                </p>
+              <div className="flex items-center gap-3 bg-forest px-5 pb-3 pt-10 text-paper">
+                <div aria-hidden="true" className="flex -space-x-2">
+                  {NOTES.filter((n) => n.kind === "review")
+                    .slice(0, 3)
+                    .map((n, i) => (
+                      <span
+                        key={n.name}
+                        className={`grid h-9 w-9 place-items-center rounded-full text-[0.65rem] font-bold ring-2 ring-forest ${AVATAR_TONES[i]}`}
+                      >
+                        {n.initials}
+                      </span>
+                    ))}
+                </div>
+                <div>
+                  <p className="font-display text-lg font-bold">
+                    Satisfied clients
+                  </p>
+                  <p className="text-xs text-sand">
+                    {typing ? "typing…" : `${REVIEW_COUNT} reviews`}
+                  </p>
+                </div>
               </div>
 
               {/* the chat: scrolls on its own, the page behind stays still */}
@@ -396,7 +442,7 @@ export default function Reviews() {
                 role="region"
                 aria-label="Reviews chat, scrollable"
                 tabIndex={0}
-                className="min-h-0 flex-1 overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vermilion"
+                className="min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-color:var(--color-forest)_transparent] [scrollbar-width:thin] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vermilion"
                 style={{
                   maskImage:
                     "linear-gradient(to bottom, transparent 0, #000 2.5rem)",
@@ -470,7 +516,7 @@ export default function Reviews() {
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     aria-label="Start your project with me"
-                    placeholder="Start your project with me"
+                    placeholder="Start your project with me…"
                     className="min-w-0 flex-1 rounded-full border border-ink/25 bg-transparent px-4 py-2 text-base text-ink placeholder:text-ink/65"
                   />
                   <button
