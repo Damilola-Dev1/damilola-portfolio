@@ -1,11 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f2ebdd;
-  --color-ink: #15130f;
-  --color-forest: #0e3b32;
-  --color-vermilion: #e8461e;
-  --color-sand: #d9cdb4;
+  /* Colour identity: Warm Parchment + Deep Espresso + Burnt Terracotta.
+     The old names are kept so no component needs renaming:
+       paper     = Warm Parchment   #F4F0E8  page background
+       ink       = Deep Espresso    #29251F  headings, dark sections, strong text
+       vermilion = Burnt Terracotta #B65F42  accent: buttons, links, active states
+       sand      = Natural Stone    #D9D0C3  borders, dividers, quiet surfaces
+       forest    = Raised Espresso  #39352F  espresso with 8% parchment mixed in.
+                   For panels that must stand out from a dark section.
+                   It is a tint of espresso, not a new accent colour.
+     White (bg-white) is for form fields and selected cards. */
+  --color-paper: #f4f0e8;
+  --color-ink: #29251f;
+  --color-forest: #39352f;
+  --color-vermilion: #b65f42;
+  --color-sand: #d9d0c3;
 
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Instrument Sans", system-ui, sans-serif;
