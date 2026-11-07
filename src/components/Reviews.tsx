@@ -13,7 +13,7 @@ import type { CSSProperties, FormEvent } from "react";
 const BOOKING_URL: string = "https://calendly.com/thedamilola123/30min";
 
 // How long each review stays before the next one starts typing (milliseconds)
-const READ_TIME = 5000;
+const READ_TIME = 3000;
 
 type Note = {
   name: string; // project name
@@ -96,8 +96,8 @@ type Msg = { id: number; from: "me" | "bot"; text: string; action?: Action };
 
 const N = NOTES.length;
 
-// Half the phone's width (max-w-[26rem] = 26rem) plus a gap, so the pills sit beside it
-const PHONE_HALF = "13rem";
+// Half the phone's width on wide screens (md:max-w-[24rem]) plus a gap, so the pills sit beside it
+const PHONE_HALF = "12rem";
 
 function pillStyle(p: Note["pill"]): CSSProperties {
   const offset = `calc(50% + ${PHONE_HALF} + 1.5rem + ${p.extra ?? "0px"})`;
@@ -331,7 +331,7 @@ export default function Reviews() {
           ))}
         </ul>
 
-        <div className="relative -mx-3 mt-14 md:mx-0 md:mt-20">
+        <div className="relative mt-14 md:mt-20">
           {/* quote pills: wide screens only, decoration */}
           <div
             aria-hidden="true"
@@ -361,9 +361,22 @@ export default function Reviews() {
             ref={phoneRef}
             role="group"
             aria-label="Chat with Damilola"
-            className="relative mx-auto w-full max-w-[26rem] rounded-[2.6rem] bg-sand p-2.5"
+            className="relative mx-auto w-full max-w-[22rem] rounded-[2.6rem] bg-sand p-2.5 md:max-w-[24rem]"
           >
-            <div className="relative flex h-[40rem] flex-col overflow-hidden rounded-[2.1rem] bg-paper text-ink md:h-[42rem]">
+            {/* side buttons, so it reads as a phone */}
+            <span
+              aria-hidden="true"
+              className="absolute -left-[3px] top-28 h-8 w-[3px] rounded-l bg-sand"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute -left-[3px] top-40 h-14 w-[3px] rounded-l bg-sand"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute -right-[3px] top-36 h-20 w-[3px] rounded-r bg-sand"
+            />
+            <div className="relative flex h-[36rem] flex-col overflow-hidden rounded-[2.1rem] bg-paper text-ink md:h-[42rem]">
               <span
                 aria-hidden="true"
                 className="absolute left-1/2 top-2.5 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-ink"
