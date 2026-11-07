@@ -256,7 +256,7 @@ export default function MoreAbout() {
                 key={q}
                 className="reveal rounded-2xl border border-ink/80 p-6"
               >
-                <p className="font-mono text-xs text-vermilion">0{i + 1}</p>
+                <p className="font-mono text-xs text-forest">0{i + 1}</p>
                 <p className="mt-6 font-display text-xl font-extrabold leading-tight tracking-tight">
                   {q}
                 </p>
