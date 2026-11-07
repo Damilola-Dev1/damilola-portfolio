@@ -12,6 +12,9 @@ import type { CSSProperties, FormEvent } from "react";
 // ---------------------------------------------------------------------------
 const BOOKING_URL: string = "https://calendly.com/thedamilola123/30min";
 
+// How long each review stays before the next one starts typing (milliseconds)
+const READ_TIME = 5000;
+
 type Note = {
   name: string; // project name
   role: string; // what kind of project it is
@@ -93,8 +96,8 @@ type Msg = { id: number; from: "me" | "bot"; text: string; action?: Action };
 
 const N = NOTES.length;
 
-// Half the phone's width (w-80 = 20rem) plus a gap, so the pills sit beside it
-const PHONE_HALF = "10rem";
+// Half the phone's width (max-w-[26rem] = 26rem) plus a gap, so the pills sit beside it
+const PHONE_HALF = "13rem";
 
 function pillStyle(p: Note["pill"]): CSSProperties {
   const offset = `calc(50% + ${PHONE_HALF} + 1.5rem + ${p.extra ?? "0px"})`;
@@ -118,7 +121,7 @@ function BotBubble({ text, action }: { text: string; action?: Action }) {
         <div className="rounded-2xl rounded-bl-md bg-forest px-4 py-3 text-paper">
           <p
             aria-hidden="true"
-            className="text-[0.9rem] font-semibold leading-snug"
+            className="text-[0.95rem] font-semibold leading-snug"
           >
             {text}
           </p>
@@ -155,11 +158,11 @@ function NoteBubble({ note }: { note: Note }) {
         alt=""
         className="h-8 w-8 shrink-0 rounded-full bg-sand object-cover object-[50%_0%]"
       />
-      <div className="min-w-0 rounded-2xl rounded-bl-md bg-forest px-3.5 py-3 text-paper">
+      <div className="min-w-0 rounded-2xl rounded-bl-md bg-forest px-4 py-3.5 text-paper">
         <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-sand">
           {note.name} · {note.role}
         </p>
-        <p className="mt-1.5 text-[0.85rem] leading-relaxed">{note.text}</p>
+        <p className="mt-2 text-[0.95rem] leading-[1.7]">{note.text}</p>
       </div>
     </div>
   );
@@ -178,12 +181,32 @@ export default function Reviews() {
   const [convo, setConvo] = useState<Msg[]>([]);
   const [draft, setDraft] = useState("");
   const [announce, setAnnounce] = useState("");
+  // the automatic chat only plays while the phone is on screen
+  const [inView, setInView] = useState(
+    () => typeof IntersectionObserver === "undefined",
+  );
   const idRef = useRef(0);
   const replyTimers = useRef<number[]>([]);
+  const phoneRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  // true while the visitor is at the bottom of the chat (so new messages scroll into view)
+  const stick = useRef(true);
+
+  // Watch for the phone coming on screen
+  useEffect(() => {
+    const el = phoneRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // The automatic chat: typing dots, review, pause, next review, repeat
   useEffect(() => {
-    if (reduced || interacted) return;
+    if (reduced || interacted || !inView) return;
     let cancelled = false;
     const timers: number[] = [];
     const wait = (ms: number) =>
@@ -198,10 +221,10 @@ export default function Reviews() {
         setFading(false);
         for (let i = 0; i < N; i++) {
           setTyping(true);
-          await wait(1000); // "typing..." dots
+          await wait(1300); // "typing..." dots
           setTyping(false);
           setShown(i + 1);
-          await wait(8000); // time to read (reviews are longer now)
+          await wait(READ_TIME); // time to read
         }
         setShown(N + 1);
         await wait(6500);
@@ -214,16 +237,37 @@ export default function Reviews() {
     return () => {
       cancelled = true;
       timers.forEach((t) => window.clearTimeout(t));
+      setTyping(false);
     };
-  }, [reduced, interacted]);
+  }, [reduced, interacted, inView]);
 
   useEffect(() => {
     const timers = replyTimers.current;
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, []);
 
+  // Keep the newest message in view, unless the visitor scrolled up to re-read
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    if (reduced && !interacted) return;
+    if (shown === 0) stick.current = true;
+    if (!stick.current) return;
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: reduced ? "auto" : "smooth",
+    });
+  }, [shown, typing, convo, reduced, interacted]);
+
+  const onChatScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
+
   // Adds what the visitor said, then Damilola's answer a moment later
   const send = (userText: string, botText: string, action?: Action) => {
+    stick.current = true;
     if (!interacted) {
       setInteracted(true);
       setShown(N + 1);
@@ -287,7 +331,7 @@ export default function Reviews() {
           ))}
         </ul>
 
-        <div className="relative mt-14 md:mt-20">
+        <div className="relative -mx-3 mt-14 md:mx-0 md:mt-20">
           {/* quote pills: wide screens only, decoration */}
           <div
             aria-hidden="true"
@@ -314,11 +358,12 @@ export default function Reviews() {
 
           {/* phone */}
           <div
+            ref={phoneRef}
             role="group"
             aria-label="Chat with Damilola"
-            className="relative mx-auto w-full max-w-[20rem] rounded-[2.6rem] bg-sand p-2.5"
+            className="relative mx-auto w-full max-w-[26rem] rounded-[2.6rem] bg-sand p-2.5"
           >
-            <div className="relative flex h-[34rem] flex-col overflow-hidden rounded-[2.1rem] bg-paper text-ink">
+            <div className="relative flex h-[40rem] flex-col overflow-hidden rounded-[2.1rem] bg-paper text-ink md:h-[42rem]">
               <span
                 aria-hidden="true"
                 className="absolute left-1/2 top-2.5 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-ink"
@@ -326,12 +371,19 @@ export default function Reviews() {
 
               <div className="bg-forest px-5 pb-3 pt-10 text-paper">
                 <p className="font-display text-lg font-bold">Reviews</p>
-                <p className="text-xs text-sand">{N} projects</p>
+                <p className="text-xs text-sand">
+                  {typing ? "typing…" : `${N} projects`}
+                </p>
               </div>
 
-              {/* the chat */}
+              {/* the chat: scrolls on its own, the page behind stays still */}
               <div
-                className="flex min-h-0 flex-1 flex-col justify-end gap-3 overflow-hidden px-3 py-3"
+                ref={scrollRef}
+                onScroll={onChatScroll}
+                role="region"
+                aria-label="Reviews chat, scrollable"
+                tabIndex={0}
+                className="min-h-0 flex-1 overflow-y-auto overscroll-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vermilion"
                 style={{
                   maskImage:
                     "linear-gradient(to bottom, transparent 0, #000 2.5rem)",
@@ -339,46 +391,48 @@ export default function Reviews() {
                     "linear-gradient(to bottom, transparent 0, #000 2.5rem)",
                 }}
               >
-                <div className={`flex flex-col gap-3 ${fade}`}>
-                  {NOTES.slice(0, shown).map((n) => (
-                    <NoteBubble key={n.name} note={n} />
-                  ))}
+                <div className="flex min-h-full flex-col justify-end gap-4 px-4 py-4">
+                  <div className={`flex flex-col gap-4 ${fade}`}>
+                    {NOTES.slice(0, shown).map((n) => (
+                      <NoteBubble key={n.name} note={n} />
+                    ))}
 
-                  {shown > N && (
-                    <BotBubble text="Your project could be next." />
+                    {shown > N && (
+                      <BotBubble text="Your project could be next." />
+                    )}
+                  </div>
+
+                  {convo.map((m) =>
+                    m.from === "me" ? (
+                      <div
+                        key={m.id}
+                        className="chat-in max-w-[85%] self-end rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-sm text-paper"
+                      >
+                        <p aria-hidden="true">{m.text}</p>
+                      </div>
+                    ) : (
+                      <BotBubble key={m.id} text={m.text} action={m.action} />
+                    ),
+                  )}
+
+                  {typing && (
+                    <div
+                      aria-hidden="true"
+                      className="chat-in flex items-end gap-2"
+                    >
+                      <span className="h-8 w-8 shrink-0" />
+                      <div className="flex gap-1.5 rounded-2xl rounded-bl-md border border-ink/10 bg-sand/45 px-4 py-3.5">
+                        {[0, 1, 2].map((d) => (
+                          <span
+                            key={d}
+                            className="h-2 w-2 animate-pulse rounded-full bg-forest"
+                            style={{ animationDelay: `${d * 0.2}s` }}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
-
-                {convo.map((m) =>
-                  m.from === "me" ? (
-                    <div
-                      key={m.id}
-                      className="chat-in max-w-[85%] self-end rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-sm text-paper"
-                    >
-                      <p aria-hidden="true">{m.text}</p>
-                    </div>
-                  ) : (
-                    <BotBubble key={m.id} text={m.text} action={m.action} />
-                  ),
-                )}
-
-                {typing && (
-                  <div
-                    aria-hidden="true"
-                    className="chat-in flex items-end gap-2"
-                  >
-                    <span className="h-8 w-8 shrink-0" />
-                    <div className="flex gap-1.5 rounded-2xl rounded-bl-md border border-ink/10 bg-sand/45 px-4 py-3.5">
-                      {[0, 1, 2].map((d) => (
-                        <span
-                          key={d}
-                          className="h-2 w-2 animate-pulse rounded-full bg-forest"
-                          style={{ animationDelay: `${d * 0.2}s` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* quick replies and message box */}
