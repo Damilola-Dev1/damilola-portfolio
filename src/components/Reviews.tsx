@@ -15,6 +15,9 @@ const BOOKING_URL: string = "https://calendly.com/thedamilola123/30min";
 // How long each review stays before the next one starts typing (milliseconds)
 const READ_TIME = 3000;
 
+// Where a visitor's loved reviews are remembered (in their own browser only)
+const LIKED_KEY = "reviews-loved";
+
 type Note = {
   name: string; // project name
   initials: string; // two letters shown in the round avatar
@@ -22,7 +25,6 @@ type Note = {
   role: string; // what kind of project it is
   text: string; // the review (or Damilola's words for the personal project)
   badge: string; // a short line that pops out beside the phone
-  link?: { label: string; href: string }; // optional small link under the review
   pill: { side: "left" | "right"; top: string; extra?: string; rotate: number };
 };
 
@@ -61,10 +63,6 @@ const NOTES: Note[] = [
     role: "Client project",
     text: "I love how my portfolio turned out. I wanted something that would present my work professionally without making it feel too complicated, and the final website achieved that. It looks good, is easy to navigate and gives people a better impression of what I do. I'm genuinely happy with the outcome.",
     badge: "Personal portfolio",
-    link: {
-      label: "View site",
-      href: "https://oluwakorede-eunice-portfolio.netlify.app/",
-    },
     pill: { side: "right", top: "58%", rotate: -4 },
   },
   {
@@ -174,11 +172,20 @@ function BotBubble({ text, action }: { text: string; action?: Action }) {
   );
 }
 
-// One review: the client's round avatar, green bubble, project name underneath.
+// One review: the client's round avatar, green bubble, project name underneath
+// and a heart button on the right.
 // The personal project (kind "own") keeps Damilola's portrait.
 // The text is hidden from screen readers (they get the plain list instead),
-// but the optional link stays reachable.
-function NoteBubble({ note }: { note: Note }) {
+// but the heart button stays reachable.
+function NoteBubble({
+  note,
+  loved,
+  onToggle,
+}: {
+  note: Note;
+  loved: boolean;
+  onToggle: () => void;
+}) {
   return (
     <div className="chat-in flex items-end gap-2">
       {note.kind === "own" ? (
@@ -195,31 +202,46 @@ function NoteBubble({ note }: { note: Note }) {
           {note.initials}
         </span>
       )}
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="rounded-2xl rounded-bl-md bg-forest px-3.5 py-3.5 text-paper">
           <p aria-hidden="true" className="text-[0.95rem] leading-[1.7]">
             {note.text}
           </p>
-          {note.link && (
-            <a
-              href={note.link.href}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-1 inline-block py-1 text-sm font-semibold text-sand underline underline-offset-4 transition-colors hover:text-paper"
-            >
-              {note.link.label}
-              <span aria-hidden="true"> →</span>
-              <span className="sr-only">
-                {" "}
-                for {note.name} (opens in a new tab)
-              </span>
-            </a>
-          )}
         </div>
-        <p aria-hidden="true" className="mt-1 text-[0.7rem] font-semibold">
-          {note.name}
-          <span className="font-normal text-ink/70"> · {note.role}</span>
-        </p>
+        <div className="mt-1 flex items-center justify-between gap-2">
+          <p aria-hidden="true" className="min-w-0 text-[0.7rem] font-semibold">
+            {note.name}
+            <span className="font-normal text-ink/70"> · {note.role}</span>
+          </p>
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-pressed={loved}
+            aria-label={`Love ${note.name}`}
+            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border transition-colors duration-200 active:scale-90 motion-reduce:transition-none ${
+              loved
+                ? "border-vermilion/50 bg-vermilion/10 text-vermilion"
+                : "border-ink/25 text-ink/60 hover:border-vermilion/50 hover:text-vermilion"
+            }`}
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill={loved ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={`transition-transform duration-200 motion-reduce:transition-none ${
+                loved ? "scale-125" : "scale-100"
+              }`}
+            >
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -238,6 +260,15 @@ export default function Reviews() {
   const [convo, setConvo] = useState<Msg[]>([]);
   const [draft, setDraft] = useState("");
   const [announce, setAnnounce] = useState("");
+  // which reviews this visitor has loved (kept in their own browser)
+  const [loved, setLoved] = useState<Record<string, boolean>>(() => {
+    try {
+      const raw = localStorage.getItem(LIKED_KEY);
+      return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
+    } catch {
+      return {};
+    }
+  });
   // the automatic chat only plays while the phone is on screen
   const [inView, setInView] = useState(
     () => typeof IntersectionObserver === "undefined",
@@ -248,6 +279,18 @@ export default function Reviews() {
   const scrollRef = useRef<HTMLDivElement>(null);
   // true while the visitor is at the bottom of the chat (so new messages scroll into view)
   const stick = useRef(true);
+
+  const toggleLove = (name: string) => {
+    setLoved((prev) => {
+      const next = { ...prev, [name]: !prev[name] };
+      try {
+        localStorage.setItem(LIKED_KEY, JSON.stringify(next));
+      } catch {
+        // storage can be blocked (private mode). The heart still works.
+      }
+      return next;
+    });
+  };
 
   // Watch for the phone coming on screen
   useEffect(() => {
@@ -480,7 +523,12 @@ export default function Reviews() {
                 <div className="flex min-h-full flex-col justify-end gap-4 px-3 py-4">
                   <div className={`flex flex-col gap-4 ${fade}`}>
                     {NOTES.slice(0, shown).map((n) => (
-                      <NoteBubble key={n.name} note={n} />
+                      <NoteBubble
+                        key={n.name}
+                        note={n}
+                        loved={!!loved[n.name]}
+                        onToggle={() => toggleLove(n.name)}
+                      />
                     ))}
 
                     {shown > N && (
