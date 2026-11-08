@@ -30,7 +30,7 @@ const PROJECTS: Project[] = [
     name: "Cedars School Admin",
     text: "A school management app with separate dashboards for admins, teachers, bursars, parents and students.",
     tools: ["React", "TypeScript", "Firebase", "Tailwind CSS"],
-    // no link yet: add url: "https://..." when the app is live
+    url: "https://cedars-school-admin.vercel.app/",
     image: "/cedars.jpg",
   },
   {
