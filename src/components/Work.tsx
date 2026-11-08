@@ -56,8 +56,7 @@ const PROJECTS: Project[] = [
     name: "Expense Tracker",
     text: "A ledger-style expense tracker where you add, edit and delete entries, with input checks.",
     tools: ["JavaScript", "HTML", "CSS"],
-    url: "https://github.com/Damilola-Dev1/expense-tracker",
-    linkLabel: "View code",
+    url: "https://damilola-dev1.github.io/expense-tracker/",
     image: "/expense-tracker.jpg",
   },
 ];
