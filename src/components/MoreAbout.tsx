@@ -75,9 +75,10 @@ const BUILDS: Build[] = [
         label: "See Reformers",
         href: "https://reformers-community-app.web.app/login",
       },
-      // Cedars has no live link yet, so this scrolls to the Projects section.
-      // When it is live, replace `to: "/#work"` with `href: "https://..."`.
-      { label: "See Cedars School Admin", to: "/#work" },
+      {
+        label: "See Cedars School Admin",
+        href: "https://cedars-school-admin.vercel.app/",
+      },
     ],
   },
 ];
