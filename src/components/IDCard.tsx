@@ -115,7 +115,7 @@ export default function IDCard({ innerRef, flipped }: Props) {
               <p className="font-display text-[1.9em] font-extrabold uppercase leading-[0.88] tracking-tight">
                 Damilola
                 <br />
-                Samuel
+                Samuel.A
               </p>
               <p className="mt-[0.7em] flex items-center gap-[0.6em] font-mono text-[0.74em] font-medium uppercase tracking-[0.14em] text-forest">
                 <span className="inline-block h-[0.55em] w-[0.55em] rounded-full bg-vermilion" />
