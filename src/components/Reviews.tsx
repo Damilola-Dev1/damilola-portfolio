@@ -22,6 +22,7 @@ type Note = {
   role: string; // what kind of project it is
   text: string; // the review (or Damilola's words for the personal project)
   badge: string; // a short line that pops out beside the phone
+  link?: { label: string; href: string }; // optional small link under the review
   pill: { side: "left" | "right"; top: string; extra?: string; rotate: number };
 };
 
@@ -60,6 +61,10 @@ const NOTES: Note[] = [
     role: "Client project",
     text: "I love how my portfolio turned out. I wanted something that would present my work professionally without making it feel too complicated, and the final website achieved that. It looks good, is easy to navigate and gives people a better impression of what I do. I'm genuinely happy with the outcome.",
     badge: "Personal portfolio",
+    link: {
+      label: "View site",
+      href: "https://oluwakorede-eunice-portfolio.netlify.app/",
+    },
     pill: { side: "right", top: "58%", rotate: -4 },
   },
   {
@@ -171,9 +176,11 @@ function BotBubble({ text, action }: { text: string; action?: Action }) {
 
 // One review: the client's round avatar, green bubble, project name underneath.
 // The personal project (kind "own") keeps Damilola's portrait.
+// The text is hidden from screen readers (they get the plain list instead),
+// but the optional link stays reachable.
 function NoteBubble({ note }: { note: Note }) {
   return (
-    <div aria-hidden="true" className="chat-in flex items-end gap-2">
+    <div className="chat-in flex items-end gap-2">
       {note.kind === "own" ? (
         <img
           src="/portrait.png"
@@ -181,15 +188,35 @@ function NoteBubble({ note }: { note: Note }) {
           className="h-8 w-8 shrink-0 rounded-full bg-sand object-cover object-[50%_0%]"
         />
       ) : (
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sand text-[0.65rem] font-bold text-ink">
+        <span
+          aria-hidden="true"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sand text-[0.65rem] font-bold text-ink"
+        >
           {note.initials}
         </span>
       )}
       <div className="min-w-0">
         <div className="rounded-2xl rounded-bl-md bg-forest px-3.5 py-3.5 text-paper">
-          <p className="text-[0.95rem] leading-[1.7]">{note.text}</p>
+          <p aria-hidden="true" className="text-[0.95rem] leading-[1.7]">
+            {note.text}
+          </p>
+          {note.link && (
+            <a
+              href={note.link.href}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-block py-1 text-sm font-semibold text-sand underline underline-offset-4 transition-colors hover:text-paper"
+            >
+              {note.link.label}
+              <span aria-hidden="true"> →</span>
+              <span className="sr-only">
+                {" "}
+                for {note.name} (opens in a new tab)
+              </span>
+            </a>
+          )}
         </div>
-        <p className="mt-1 text-[0.7rem] font-semibold">
+        <p aria-hidden="true" className="mt-1 text-[0.7rem] font-semibold">
           {note.name}
           <span className="font-normal text-ink/70"> · {note.role}</span>
         </p>
