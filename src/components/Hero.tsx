@@ -52,44 +52,77 @@ export default function Hero() {
   useEffect(() => {
     if (reduced) return;
 
-    const ctx = gsap.context(() => {
-      // Card drops in on its lanyard, then keeps swinging gently
-      gsap.set(swingRef.current, { transformOrigin: "50% 0%" });
-      gsap.from(swingRef.current, {
-        y: -520,
-        duration: 1.3,
-        ease: "power3.out",
-      });
-      gsap.fromTo(
-        swingRef.current,
-        { rotation: -2.5 },
-        {
-          rotation: 2.5,
-          duration: 3.4,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        },
-      );
+    let cancelled = false;
 
-      // The card turns itself: front, pause, back, pause, repeat
-      autoRef.current = gsap
-        .timeline({ repeat: -1, onUpdate: syncFlipped })
-        .to(
-          flipRef.current,
-          { rotationY: 180, duration: 1, ease: "power2.inOut" },
-          `+=${FRONT_HOLD}`,
-        )
-        .call(pauseIfHovered)
-        .to(
-          flipRef.current,
-          { rotationY: 0, duration: 1, ease: "power2.inOut" },
-          `+=${BACK_HOLD}`,
-        )
-        .call(pauseIfHovered);
+    // Park the card above the screen straight away
+    const ctx = gsap.context(() => {
+      gsap.set(swingRef.current, {
+        transformOrigin: "50% 0%",
+        y: -520,
+        force3D: true,
+      });
+    });
+
+    // Wait until the card photo and fonts are ready (but never more than
+    // 2 seconds), so the drop is not fighting the page for time.
+    const imgs: HTMLImageElement[] = flipRef.current
+      ? Array.from(flipRef.current.querySelectorAll("img"))
+      : [];
+    const ready = Promise.race([
+      Promise.all([
+        document.fonts ? document.fonts.ready : Promise.resolve(),
+        ...imgs.map((img) =>
+          img.decode ? img.decode().catch(() => undefined) : Promise.resolve(),
+        ),
+      ]),
+      new Promise((resolve) => window.setTimeout(resolve, 2000)),
+    ]);
+
+    ready.then(() => {
+      if (cancelled) return;
+      requestAnimationFrame(() => {
+        if (cancelled) return;
+        ctx.add(() => {
+          // Card drops in on its lanyard, then keeps swinging gently
+          gsap.to(swingRef.current, {
+            y: 0,
+            duration: 1.3,
+            ease: "power3.out",
+            force3D: true,
+          });
+          gsap.fromTo(
+            swingRef.current,
+            { rotation: -2.5 },
+            {
+              rotation: 2.5,
+              duration: 3.4,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: -1,
+            },
+          );
+
+          // The card turns itself: front, pause, back, pause, repeat
+          autoRef.current = gsap
+            .timeline({ repeat: -1, onUpdate: syncFlipped })
+            .to(
+              flipRef.current,
+              { rotationY: 180, duration: 1, ease: "power2.inOut" },
+              `+=${FRONT_HOLD}`,
+            )
+            .call(pauseIfHovered)
+            .to(
+              flipRef.current,
+              { rotationY: 0, duration: 1, ease: "power2.inOut" },
+              `+=${BACK_HOLD}`,
+            )
+            .call(pauseIfHovered);
+        });
+      });
     });
 
     return () => {
+      cancelled = true;
       ctx.revert();
       autoRef.current = null;
     };
@@ -176,7 +209,10 @@ export default function Hero() {
       </div>
 
       {/* the hanging card */}
-      <div ref={swingRef} className="relative z-10 flex flex-col items-center">
+      <div
+        ref={swingRef}
+        className="relative z-10 flex flex-col items-center will-change-transform"
+      >
         <Lanyard />
         <div
           className="cursor-pointer"
