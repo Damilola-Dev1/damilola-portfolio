@@ -27,6 +27,13 @@ type Project = {
 
 const PROJECTS: Project[] = [
   {
+    name: "Rophen Visuals",
+    text: "A creative portfolio website for a photography and video production brand.",
+    tools: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    url: "https://rophen-visuals.vercel.app/",
+    image: "/rophen-visuals.jpg",
+  },
+  {
     name: "Cedars School Admin",
     text: "A school management app with separate dashboards for admins, teachers, bursars, parents and students.",
     tools: ["React", "TypeScript", "Firebase", "Tailwind CSS"],
@@ -34,17 +41,17 @@ const PROJECTS: Project[] = [
     image: "/cedars.jpg",
   },
   {
+    name: "Pwesh Beauty Hub",
+    text: "A landing page for a beauty training business.",
+    url: "https://pwesh-beauty-hub.netlify.app/",
+    image: "/pwesh.jpg",
+  },
+  {
     name: "The Reformers Nation Community App",
     text: "A community app for registering and managing members, with announcements and admin dashboards.",
     tools: ["React", "TypeScript", "Firebase"],
     url: "https://reformers-community-app.web.app/login",
     image: "/reformers.jpg",
-  },
-  {
-    name: "Pwesh Beauty Hub",
-    text: "A landing page for a beauty training business.",
-    url: "https://pwesh-beauty-hub.netlify.app/",
-    image: "/pwesh.jpg",
   },
   {
     name: "Oluwakorede's Portfolio",
